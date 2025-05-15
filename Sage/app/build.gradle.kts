@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.sage"
-        minSdk = 16
+        minSdk = 19
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
