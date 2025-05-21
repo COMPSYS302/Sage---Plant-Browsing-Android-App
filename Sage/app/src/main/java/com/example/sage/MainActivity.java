@@ -25,12 +25,6 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // Apply Quicksand Font
-        TextView textView = findViewById(R.id.logoText);
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.quicksand);
-        textView.setTypeface(typeface);
-
-
 
         // Linking bottom navigation to views
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
