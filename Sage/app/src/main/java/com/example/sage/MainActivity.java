@@ -6,6 +6,9 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.view.Menu;
+import android.graphics.Typeface;
+import androidx.core.content.res.ResourcesCompat;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,6 +24,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        // Apply Quicksand Font
+        TextView textView = findViewById(R.id.logoText);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.quicksand);
+        textView.setTypeface(typeface);
 
 
 

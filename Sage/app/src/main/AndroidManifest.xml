@@ -13,6 +13,9 @@
         android:theme="@style/Base.Theme.Sage"
         tools:targetApi="31">
         <activity
+            android:name=".ui.DetailsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ScrollingActivity"
             android:exported="false"
             android:label="@string/title_activity_scrolling"
@@ -36,6 +39,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>
