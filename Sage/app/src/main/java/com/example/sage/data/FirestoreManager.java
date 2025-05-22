@@ -6,11 +6,16 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class FirestoreManager {
     private static final String TAG = "FirestoreManager";
     private static final String COLLECTION_NAME = "plants";
-    private final FirebaseFirestore db;
+    private static FirebaseFirestore db = null;
 
     public FirestoreManager() {
         db = FirebaseFirestore.getInstance();
@@ -46,5 +51,21 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
+    public static void retrieveAllPlants(OnSuccessListener<List<Plant>> onSuccess, OnFailureListener onFailure) {
+        db.collection(COLLECTION_NAME)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Plant> plantList = new ArrayList<>();
+                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                        Plant plant = document.toObject(Plant.class);
+                        if (plant != null) {
+                            plantList.add(plant);
+                        }
+                    }
+                    onSuccess.onSuccess(plantList);
+                })
+                .addOnFailureListener(onFailure);
+    }
+
 }
 
