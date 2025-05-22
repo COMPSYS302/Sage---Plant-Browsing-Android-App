@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "912494422604",
+    "project_id": "sage-d2a7e",
+    "storage_bucket": "sage-d2a7e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912494422604:android:5d48f0f7cd1bcc01c0a2e9",
+        "android_client_info": {
+          "package_name": "com.example.sage"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCX9i7KQIHW5KNY-oWbve7DyqXTcQPWSSY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

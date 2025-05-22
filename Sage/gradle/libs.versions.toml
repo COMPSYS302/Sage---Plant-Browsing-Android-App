@@ -1,5 +1,6 @@
 [versions]
 agp = "8.10.0"
+gms = "4.4.2"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -27,4 +28,4 @@ viewpager2 = { group = "androidx.viewpager2", name = "viewpager2", version.ref =
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
-
+google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
