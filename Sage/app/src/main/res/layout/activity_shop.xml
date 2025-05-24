@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:paddingTop="20dp"
     android:background="@color/white"
-    tools:context=".ShopActivity">
+    tools:context=".ui.ShopActivity">
 
     <!-- Shop Title -->
     <TextView

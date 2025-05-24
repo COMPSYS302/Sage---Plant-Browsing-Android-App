@@ -1,5 +1,6 @@
 package com.example.sage.data;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sage.R;
+import com.example.sage.ui.DetailsActivity;
 
 import java.util.List;
 
@@ -72,13 +74,21 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             plantCategory.setText(plant.getCategory());
             plantPrice.setText("$" + String.format("%.2f", plant.getPrice()));
 
-            // Placeholder image (replace later)
-            plantImage.setImageResource(R.drawable.ic_logo);
+            // Set plant image dynamically (replace placeholder)
+            //plantImage.setImageResource(plant.getImageResource());
 
             // Handles click on a plant card
             itemView.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Clicked: " + plant.getName(), Toast.LENGTH_SHORT).show();
-                // Launch DetailsActivity or show more info here
+                Intent intent = new Intent(v.getContext(), DetailsActivity.class);
+                intent.putExtra("plant_name", plant.getName());
+                intent.putExtra("plant_category", plant.getCategory());
+                intent.putExtra("plant_price", plant.getPrice());
+                intent.putExtra("plant_sunlight", plant.getSunlight());
+                intent.putExtra("plant_water", plant.getWater());
+                intent.putExtra("plant_season", plant.getSeason());
+                // intent.putExtra("plant_image", plant.getImageResource()); // not implemented yet
+
+                v.getContext().startActivity(intent);
             });
         }
     }

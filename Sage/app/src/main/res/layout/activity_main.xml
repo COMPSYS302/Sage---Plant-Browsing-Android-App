@@ -8,7 +8,7 @@
     android:background="@color/white"
     android:paddingTop="24dp"
     android:clipToPadding="false"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <LinearLayout
         android:layout_marginTop="40dp"
