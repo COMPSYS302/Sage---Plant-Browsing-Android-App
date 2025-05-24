@@ -11,21 +11,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sage.R;
-import com.example.sage.data.Plant;
 
 import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
 
-    // This list holds all the plants to be displayed
-    private final List<Plant> plantList;
+    // Holds the current list of plants to display
+    private List<Plant> plantList;
 
-    // Constructor to initialize the adapter with a list of plants
+    // Constructor initializes the adapter with the plant list
     public PlantAdapter(List<Plant> plantList) {
         this.plantList = plantList;
     }
 
-    // Inflates the layout for each plant item
+    // Replaces the existing data with a new filtered list
+    public void updateData(List<Plant> newPlantList) {
+        this.plantList = newPlantList;
+        notifyDataSetChanged(); // Notify the RecyclerView to refresh
+    }
+
+    // Inflates the item layout and returns a new ViewHolder
     @NonNull
     @Override
     public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -34,40 +39,46 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         return new PlantViewHolder(view);
     }
 
-    // Binds plant data to the item views
+    // Binds each plant in the list to the ViewHolder
     @Override
     public void onBindViewHolder(@NonNull PlantViewHolder holder, int position) {
         holder.bindView(plantList.get(position));
     }
 
-    // Returns the total number of plant items
+    // Returns the number of items in the plant list
     @Override
     public int getItemCount() {
         return plantList.size();
     }
 
-    // ViewHolder class that holds and binds each plant item
+    // ViewHolder for individual plant cards
     public static class PlantViewHolder extends RecyclerView.ViewHolder {
         private final TextView plantName;
+        private final TextView plantCategory;
+        private final TextView plantPrice;
         private final ImageView plantImage;
 
         public PlantViewHolder(@NonNull View itemView) {
             super(itemView);
             plantName = itemView.findViewById(R.id.plantName);
+            plantCategory = itemView.findViewById(R.id.plantCategory);
+            plantPrice = itemView.findViewById(R.id.plantPrice);
             plantImage = itemView.findViewById(R.id.plant_image);
         }
 
-        // Binds the plant object to the item view
+        // Populates the plant item with data
         public void bindView(Plant plant) {
             plantName.setText(plant.getName());
+            plantCategory.setText(plant.getCategory());
+            plantPrice.setText("$" + String.format("%.2f", plant.getPrice()));
 
-            // Set a default image. You can replace this with an image loading library later.
+            // Placeholder image (replace later)
             plantImage.setImageResource(R.drawable.ic_logo);
 
-            // Set click behavior for each plant item
+            // Handles click on a plant card
             itemView.setOnClickListener(v -> {
-                // You can replace this with an intent to go to a detail page
                 Toast.makeText(v.getContext(), "Clicked: " + plant.getName(), Toast.LENGTH_SHORT).show();
+                // Launch DetailsActivity or show more info here
             });
         }
     }

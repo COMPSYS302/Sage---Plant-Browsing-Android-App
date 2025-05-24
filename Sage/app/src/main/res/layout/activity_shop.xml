@@ -5,30 +5,74 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="20dp"
+    android:background="@color/white"
     tools:context=".ShopActivity">
 
-
+    <!-- Shop Title -->
     <TextView
         android:id="@+id/shopTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Shop"
-        android:textSize="36sp"
+        android:textSize="36dp"
         android:textColor="@color/green"
+        android:fontFamily="@font/quicksand_semibold"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp" />
 
+    <!-- Search bar with filter button -->
+    <LinearLayout
+        android:id="@+id/searchFilterContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shopTitle"
+        android:orientation="horizontal"
+        android:layout_margin="20dp"
+        android:gravity="center_vertical">
 
+        <!-- Search EditText -->
+        <EditText
+            android:id="@+id/searchEditText"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1.5"
+            android:hint="Search..."
+            android:padding="12dp"
+            android:background="@drawable/rounded_box"
+            android:fontFamily="@font/quicksand_semibold"
+            android:drawableStart="@drawable/ic_search"
+            android:drawablePadding="10dp" />
+
+        <!-- Filter Icon/Button -->
+        <ImageView
+            android:id="@+id/filterIcon"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="12dp"
+            android:padding="10dp"
+            android:src="@drawable/ic_filter"
+            android:contentDescription="Filter icon"
+            android:layout_gravity="end" />
+    </LinearLayout>
+
+
+    <!-- RecyclerView showing two items per row -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewPlants"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/shopTitle"
+        android:layout_height="0dp"
+        android:layout_below="@id/searchFilterContainer"
         android:layout_above="@id/bottomNavigationView"
-        android:padding="12dp"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        android:scrollbars="vertical"
         tools:listitem="@layout/item_plant" />
 
 
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
@@ -44,4 +88,5 @@
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@color/transparent"
         app:labelVisibilityMode="unlabeled" />
+
 </RelativeLayout>
