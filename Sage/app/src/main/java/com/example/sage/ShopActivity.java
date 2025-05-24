@@ -13,11 +13,11 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -38,8 +38,8 @@ public class ShopActivity extends AppCompatActivity {
     private PopupWindow popupWindow;
 
     private List<Plant> allPlants = new ArrayList<>(); // Full list of plants from Firestore
-    private boolean isFilterActive = false;            // Tracks if a category filter is applied
-    private String selectedCategory = "All";           // Currently selected filter category
+    private boolean isFilterActive = false; // Tracks if a category filter is applied
+    private String selectedCategory = "All"; // Currently selected filter category
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,19 +47,59 @@ public class ShopActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_shop);
 
-        // Setup RecyclerView with GridLayoutManager for two columns
+        // Setup RecyclerView with 2 column grid layout
         recyclerView = findViewById(R.id.recyclerViewPlants);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         // Initialize filter icon
         filterIcon = findViewById(R.id.filterIcon);
 
+        // Get the filter category from the intent
+        String categoryFilter = getIntent().getStringExtra("categoryFilter");
+        if (categoryFilter != null) {
+            selectedCategory = categoryFilter;
+            isFilterActive = !categoryFilter.equalsIgnoreCase("All");
+        }
+
         setupFilterDropdown();      // Set up filter popup behavior
         setupBottomNavigation();    // Configure bottom nav bar
-        loadPlants();               // Load plant data from Firestore
-        updateFilterIconColor();    // Set initial icon color
+        loadPlants();               // Load plant data and apply filter if needed
+        updateFilterIconColor();    // Reflect filter icon state
+    }
 
+    private void applyCategoryFilter(String category) {
+        selectedCategory = category; // Remember selection
+        isFilterActive = !category.equalsIgnoreCase("All");
 
+        FirestoreManager.retrieveAllPlants(
+                plants -> {
+                    allPlants = plants; // Store full list
+
+                    List<Plant> filtered;
+                    if (category.equalsIgnoreCase("All")) {
+                        filtered = plants;
+                    } else {
+                        filtered = new ArrayList<>();
+                        for (Plant plant : plants) {
+                            if (plant.getCategory().equalsIgnoreCase(category)) {
+                                filtered.add(plant);
+                            }
+                        }
+                    }
+
+                    if (adapter == null) {
+                        adapter = new PlantAdapter(filtered);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        adapter.updateData(filtered);
+                    }
+
+                    updateFilterIconColor(); // Update icon color based on state
+                },
+                e -> {
+                    Toast.makeText(this, "Failed to load plants: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+        );
     }
 
     /**
@@ -86,7 +126,7 @@ public class ShopActivity extends AppCompatActivity {
         ListView categoryListView = popupView.findViewById(R.id.categoryFilterList);
         String[] categories = {"All", "Indoor", "Flowering", "Edible"};
 
-        // Custom adapter that highlights the selected category in green
+        // Adapter that highlights the selected category in green
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -142,7 +182,7 @@ public class ShopActivity extends AppCompatActivity {
             adapter.updateData(filteredList);
         }
 
-        updateFilterIconColor(); // Reflect new filter state visually
+        updateFilterIconColor(); // Reflect new filter state on ui
     }
 
     /**
@@ -163,12 +203,34 @@ public class ShopActivity extends AppCompatActivity {
         FirestoreManager.retrieveAllPlants(
                 plantList -> {
                     allPlants = plantList;
-                    adapter = new PlantAdapter(plantList);
-                    recyclerView.setAdapter(adapter);
+
+                    List<Plant> displayList;
+
+                    if (selectedCategory != null && !selectedCategory.equalsIgnoreCase("All")) {
+                        isFilterActive = true;
+                        displayList = allPlants.stream()
+                                .filter(p -> p.getCategory().equalsIgnoreCase(selectedCategory))
+                                .collect(Collectors.toList());
+                    } else {
+                        isFilterActive = false;
+                        displayList = allPlants;
+                    }
+
+                    if (adapter == null) {
+                        adapter = new PlantAdapter(displayList);
+                        recyclerView.setAdapter(adapter);
+                    } else {
+                        adapter.updateData(displayList);
+                    }
+
+                    updateFilterIconColor(); // Update filter on ui
                 },
-                e -> e.printStackTrace()
+                e -> {
+                    Toast.makeText(this, "Failed to load plants: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
         );
     }
+
 
     /**
      * Sets up the bottom navigation bar to navigate between activities.
