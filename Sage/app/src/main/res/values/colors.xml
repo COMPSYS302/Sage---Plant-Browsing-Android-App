@@ -7,4 +7,5 @@
     <color name="transparent">#00F44336</color>
     <color name="mint">#DFEFEB</color>
     <color name="grey">#ABABAB</color>
+    <color name="light_gray">#FDAFAAAA</color>
 </resources>
