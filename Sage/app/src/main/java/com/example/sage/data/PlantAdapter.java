@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.sage.R;
 import com.example.sage.ui.DetailsActivity;
 
@@ -73,7 +74,17 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             plantName.setText(plant.getName());
             plantCategory.setText(plant.getCategory());
             plantPrice.setText("$" + String.format("%.2f", plant.getPrice()));
-
+            // Load the plant image from Firestore using Glide
+            if (plant.getImages() != null && !plant.getImages().isEmpty()) {
+                String imageUrl = plant.getImages().get(0); // Use the first image as shop preview
+                Glide.with(itemView.getContext())
+                        .load(imageUrl)
+                        .placeholder(R.drawable.placeholder) // Show while loading
+                        .error(R.drawable.image_failed)      // Show if loading fails
+                        .into(plantImage);
+            } else {
+                plantImage.setImageResource(R.drawable.placeholder);
+            }
             // Set plant image dynamically (replace placeholder)
             //plantImage.setImageResource(plant.getImageResource());
 
