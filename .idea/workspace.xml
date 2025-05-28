@@ -16,14 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Basic Imports for FavouritesActivity add to .java file">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/FavouritesActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/FavouritesActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/data/PlantAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/data/PlantAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/res/layout/activity_main.xml" afterDir="false" />
-    </list>
+    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Search bar athstetics added to the app functionalities still being implemented." />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -217,7 +210,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748330797758</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Search bar athstetics added to the app functionalities still being implemented.">
+      <option name="closed" value="true" />
+      <created>1748414318529</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1748414318529</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -235,7 +236,8 @@
     <MESSAGE value="modify firebase and change the view interface" />
     <MESSAGE value="image updated" />
     <MESSAGE value="Basic Imports for FavouritesActivity add to .java file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Basic Imports for FavouritesActivity add to .java file" />
+    <MESSAGE value="Search bar athstetics added to the app functionalities still being implemented." />
+    <option name="LAST_COMMIT_MESSAGE" value="Search bar athstetics added to the app functionalities still being implemented." />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
