@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +17,11 @@ import com.example.sage.ui.DetailsActivity;
 import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
+
+//    public void setFilteredList(List<Plant> filteredList) {
+//        this.plantList = filteredList;
+//        notifyDataSetChanged();
+//    }
 
     // Holds the current list of plants to display
     private List<Plant> plantList;

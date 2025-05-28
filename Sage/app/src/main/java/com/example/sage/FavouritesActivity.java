@@ -24,10 +24,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.sage.data.PlantAdapter;
@@ -38,8 +34,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 
 
@@ -60,9 +54,9 @@ public class FavouritesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_favourites);
-//
-//        recyclerView = findViewById(R.id.recyclerViewFavourites);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(this, 2));
+
+//        recyclerView = findViewById(R.id.recyclerViewPlants);
+//        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         // currently an error ^
 
         // Linking bottom navigation to views
