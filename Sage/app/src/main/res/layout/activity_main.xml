@@ -25,15 +25,18 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/white"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp">
 
+            <!-- Logo and Text on the left -->
             <ImageView
                 android:id="@+id/logo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
                 android:adjustViewBounds="true"
-                android:src="@drawable/ic_logo" />
+                android:src="@drawable/ic_logo"
+                android:layout_marginEnd="8dp" />
 
             <TextView
                 android:id="@+id/logoText"
@@ -45,7 +48,25 @@
                 android:textSize="36sp"
                 android:textStyle="bold" />
 
+            <!-- Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <!-- Profile icon on the right -->
+            <ImageView
+                android:id="@+id/profileIcon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/ic_profile"
+                android:padding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_marginStart="16dp" />
+
         </LinearLayout>
+
 
         <AutoCompleteTextView
             android:id="@+id/searchAutoComplete"

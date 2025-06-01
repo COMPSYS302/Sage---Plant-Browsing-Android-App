@@ -12,7 +12,7 @@ public class LoadingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
-        // 2-second delay before switching to MainActivity
+        // 5-second delay before switching to MainActivity
         new Handler().postDelayed(() -> {
             startActivity(new Intent(LoadingActivity.this, MainActivity.class));
             finish();

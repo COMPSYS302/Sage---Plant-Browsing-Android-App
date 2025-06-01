@@ -2,9 +2,10 @@ package com.example.sage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -15,15 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
 import com.example.sage.data.PlantAdapter;
-import com.example.sage.SearchBarHelper;
-import com.example.sage.ui.DetailsActivity;
+import com.example.sage.LoginActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,22 +67,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.bottom_home) return true;
-            if (itemId == R.id.bottom_shop) {
-                startActivity(new Intent(this, ShopActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-                return true;
-            } else if (itemId == R.id.bottom_favourites) {
-                startActivity(new Intent(this, FavouritesActivity.class));
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
-                return true;
-            }
-            return false;
-        });
+
+
 
         // Category icons to open ShopActivity with filter
         ImageView categoryIndoor = findViewById(R.id.categoryIndoor);
@@ -92,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
         categoryIndoor.setOnClickListener(v -> openShopWithFilter("Indoor"));
         categoryFlowering.setOnClickListener(v -> openShopWithFilter("Flowering"));
         categoryEdible.setOnClickListener(v -> openShopWithFilter("Edible"));
+
+        ImageView profileIcon = findViewById(R.id.profileIcon);
+        profileIcon.setOnClickListener(view -> showProfileMenu(view));
+
     }
 
     private void openShopWithFilter(String category) {
@@ -100,4 +90,36 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
+
+
+    private void showProfileMenu(View anchor) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        boolean isLoggedIn = user != null;
+
+        // Toggle menu items based on login state
+        popup.getMenu().findItem(R.id.menu_login).setVisible(!isLoggedIn);
+        popup.getMenu().findItem(R.id.menu_logout).setVisible(isLoggedIn);
+
+        // Handle menu actions
+        popup.setOnMenuItemClickListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.menu_login) {
+                startActivity(new Intent(this, LoginActivity.class));
+                return true;
+            } else if (id == R.id.menu_logout) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+            return false;
+        });
+
+        popup.show();
+    }
+
+
+
 }
