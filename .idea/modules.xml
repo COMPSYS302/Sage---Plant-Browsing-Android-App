@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/2025-project-java-2025_project_java_team_6.iml" filepath="$PROJECT_DIR$/.idea/2025-project-java-2025_project_java_team_6.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/Sage.iml" filepath="$PROJECT_DIR$/.idea/modules/Sage.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Sage.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Sage.app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/Sage.app.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/app/Sage.app.androidTest.iml" />

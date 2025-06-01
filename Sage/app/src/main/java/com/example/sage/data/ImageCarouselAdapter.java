@@ -8,17 +8,19 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.sage.R;
 
 import java.util.List;
 
 public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdapter.CarouselViewHolder> {
 
-    private final List<Integer> imageResIds;
+    private final List<String> imageUrls;
 
-    public ImageCarouselAdapter(List<Integer> imageResIds) {
-        this.imageResIds = imageResIds;
+    public ImageCarouselAdapter(List<String> imageUrls) {
+        this.imageUrls = imageUrls;
     }
+
 
     @NonNull
     @Override
@@ -28,15 +30,21 @@ public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdap
         return new CarouselViewHolder(view);
     }
 
-    @Override
     public void onBindViewHolder(@NonNull CarouselViewHolder holder, int position) {
-        holder.imageView.setImageResource(imageResIds.get(position));
+        // ✅ Load image from URL using Glide
+        String url = imageUrls.get(position);
+        Glide.with(holder.imageView.getContext())
+                .load(url)
+                .placeholder(R.drawable.placeholder) // Show this while loading
+                .error(R.drawable.image_failed)      // Show this on load error
+                .into(holder.imageView);
     }
 
     @Override
     public int getItemCount() {
-        return imageResIds.size();
+        return imageUrls.size();
     }
+
 
     static class CarouselViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;

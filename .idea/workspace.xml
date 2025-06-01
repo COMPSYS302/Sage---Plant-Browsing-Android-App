@@ -16,7 +16,12 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Search bar athstetics added to the app functionalities still being implemented." />
+    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="workspace.xml update">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/app/Sage.app.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/app/Sage.app.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sage/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/gradle/libs.versions.toml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -83,6 +88,7 @@
     "RunOnceActivity.cidr.known.project.marker": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "android.gradle.sync.needed": "true",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
     "com.google.services.firebase.aqiPopupShown": "true",
@@ -218,7 +224,47 @@
       <option name="project" value="LOCAL" />
       <updated>1748414318529</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748414365744</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1748414365744</updated>
+    </task>
+    <task id="LOCAL-00007" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748761362876</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1748761362876</updated>
+    </task>
+    <task id="LOCAL-00008" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748763891195</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1748763891195</updated>
+    </task>
+    <task id="LOCAL-00009" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748763991987</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1748763991987</updated>
+    </task>
+    <task id="LOCAL-00010" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748764009066</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1748764009066</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -237,19 +283,20 @@
     <MESSAGE value="image updated" />
     <MESSAGE value="Basic Imports for FavouritesActivity add to .java file" />
     <MESSAGE value="Search bar athstetics added to the app functionalities still being implemented." />
-    <option name="LAST_COMMIT_MESSAGE" value="Search bar athstetics added to the app functionalities still being implemented." />
+    <MESSAGE value="workspace.xml update" />
+    <option name="LAST_COMMIT_MESSAGE" value="workspace.xml update" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
       <map>
         <entry key="com.example.sage">
           <value>
-            <CheckInfo lastCheckTimestamp="1748409662561" />
+            <CheckInfo lastCheckTimestamp="1748764385678" />
           </value>
         </entry>
         <entry key="com.example.sage.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1748409662562" />
+            <CheckInfo lastCheckTimestamp="1748764385677" />
           </value>
         </entry>
       </map>
