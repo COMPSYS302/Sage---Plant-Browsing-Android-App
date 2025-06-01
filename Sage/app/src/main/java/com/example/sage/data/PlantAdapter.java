@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,9 +21,17 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     // Holds the current list of plants to display
     private List<Plant> plantList;
 
-    // Constructor initializes the adapter with the plant list
-    public PlantAdapter(List<Plant> plantList) {
+    // Reference to FirestoreManager for incrementing views
+    private final FirestoreManager firestoreManager;
+
+    // Layout resource ID for inflating different layouts
+    private final int layoutId;
+
+    // Constructor initializes the adapter with the plant list, FirestoreManager, and layout ID
+    public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId) {
         this.plantList = plantList;
+        this.firestoreManager = firestoreManager;
+        this.layoutId = layoutId;
     }
 
     // Replaces the existing data with a new filtered list
@@ -38,8 +45,8 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     @Override
     public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_plant, parent, false);
-        return new PlantViewHolder(view);
+                .inflate(layoutId, parent, false); // Use dynamic layout ID
+        return new PlantViewHolder(view, firestoreManager);
     }
 
     // Binds each plant in the list to the ViewHolder
@@ -61,12 +68,19 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         private final TextView plantPrice;
         private final ImageView plantImage;
 
-        public PlantViewHolder(@NonNull View itemView) {
+        private final TextView plantViews;
+        private final FirestoreManager firestoreManager;
+
+        public PlantViewHolder(@NonNull View itemView, FirestoreManager firestoreManager) {
             super(itemView);
+            this.firestoreManager = firestoreManager;
+
+            // View binding
             plantName = itemView.findViewById(R.id.plantName);
             plantCategory = itemView.findViewById(R.id.plantCategory);
             plantPrice = itemView.findViewById(R.id.plantPrice);
             plantImage = itemView.findViewById(R.id.plant_image);
+            plantViews = itemView.findViewById(R.id.plantViews);
         }
 
         // Populates the plant item with data
@@ -74,6 +88,8 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             plantName.setText(plant.getName());
             plantCategory.setText(plant.getCategory());
             plantPrice.setText("$" + String.format("%.2f", plant.getPrice()));
+            plantViews.setText(String.valueOf(plant.getViews()) + " views");
+
             // Load the plant image from Firestore using Glide
             if (plant.getImages() != null && !plant.getImages().isEmpty()) {
                 String imageUrl = plant.getImages().get(0); // Use the first image as shop preview
@@ -85,11 +101,13 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             } else {
                 plantImage.setImageResource(R.drawable.placeholder);
             }
-            // Set plant image dynamically (replace placeholder)
-            //plantImage.setImageResource(plant.getImageResource());
 
             // Handles click on a plant card
             itemView.setOnClickListener(v -> {
+                // Increment the view count in Firestore
+                firestoreManager.incrementPlantViews(plant.getPlantid());
+
+                // Start DetailsActivity with plant data
                 Intent intent = new Intent(v.getContext(), DetailsActivity.class);
                 intent.putExtra("plant_name", plant.getName());
                 intent.putExtra("plant_category", plant.getCategory());

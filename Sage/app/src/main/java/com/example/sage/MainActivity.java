@@ -1,20 +1,28 @@
 package com.example.sage;
 
-import android.os.Bundle;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.sage.data.FirestoreManager;
+import com.example.sage.data.Plant;
+import com.example.sage.data.PlantAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.Collections;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     private FirestoreManager firestoreManager;
+    private RecyclerView topPicksRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,21 +33,40 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Firestore manager
         firestoreManager = new FirestoreManager();
 
+        // Set up Top Picks RecyclerView
+        topPicksRecyclerView = findViewById(R.id.topPicksRecyclerView);
+        topPicksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        // Load and display top 3 most viewed plants
+        firestoreManager.getAllPlants(plants -> {
+            if (plants != null && !plants.isEmpty()) {
+                // Randomize first to break ties
+                Collections.shuffle(plants);
+                // Sort by views descending
+                Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
+
+                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));
+                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager,R.layout.top_pick_card);
+                topPicksRecyclerView.setAdapter(topPicksAdapter);
+            } else {
+                Toast.makeText(this, "No plants found", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         // Set up bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setSelectedItemId(R.id.bottom_home); // Set default selected
+        bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
-            if (itemId == R.id.bottom_home) {
-                return true; // Already in this view
-            } else if (itemId == R.id.bottom_shop) {
-                startActivity(new Intent(MainActivity.this, ShopActivity.class));
+            if (itemId == R.id.bottom_home) return true;
+            if (itemId == R.id.bottom_shop) {
+                startActivity(new Intent(this, ShopActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
             } else if (itemId == R.id.bottom_favourites) {
-                startActivity(new Intent(MainActivity.this, FavouritesActivity.class));
+                startActivity(new Intent(this, FavouritesActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
@@ -55,15 +82,10 @@ public class MainActivity extends AppCompatActivity {
         categoryIndoor.setOnClickListener(v -> openShopWithFilter("Indoor"));
         categoryFlowering.setOnClickListener(v -> openShopWithFilter("Flowering"));
         categoryEdible.setOnClickListener(v -> openShopWithFilter("Edible"));
-
-
     }
 
-    /**
-     * Opens ShopActivity with the selected category as a filter.
-     */
     private void openShopWithFilter(String category) {
-        Intent intent = new Intent(MainActivity.this, ShopActivity.class);
+        Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra("categoryFilter", category);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

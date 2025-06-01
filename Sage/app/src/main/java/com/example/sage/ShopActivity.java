@@ -88,7 +88,8 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        adapter = new PlantAdapter(filtered);
+                        FirestoreManager firestoreManager = new FirestoreManager();
+                        adapter = new PlantAdapter(filtered, firestoreManager, R.layout.item_plant);
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateData(filtered);
@@ -126,7 +127,7 @@ public class ShopActivity extends AppCompatActivity {
         ListView categoryListView = popupView.findViewById(R.id.categoryFilterList);
         String[] categories = {"All", "Indoor", "Flowering", "Edible"};
 
-        // Adapter that highlights the selected category in green
+        // Adapter that highlights the selected category
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -217,7 +218,8 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        adapter = new PlantAdapter(displayList);
+                        FirestoreManager firestoreManager = new FirestoreManager();
+                        adapter = new PlantAdapter(displayList,firestoreManager,R.layout.item_plant);
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateData(displayList);

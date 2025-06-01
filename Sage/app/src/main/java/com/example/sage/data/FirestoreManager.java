@@ -6,8 +6,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,6 +69,46 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
+    public void incrementPlantViews(int plantId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("plants")
+                .whereEqualTo("plantid", plantId)
+                .limit(1) // in case there's more than one with the same plantid
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                        doc.getReference().update("views", FieldValue.increment(1));
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirestoreManager", "Failed to increment views: ", e);
+                });
+    }
+
+
+    public interface OnPlantDataLoadedListener {
+        void onDataLoaded(List<Plant> plants);
+    }
+
+    public void getAllPlants(OnPlantDataLoadedListener listener) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("plants")
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Plant> plantList = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Plant plant = document.toObject(Plant.class);
+                        plantList.add(plant);
+                    }
+                    listener.onDataLoaded(plantList);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("Firestore", "Error fetching plants", e);
+                    listener.onDataLoaded(null);
+                });
+    }
+
 
 }
 

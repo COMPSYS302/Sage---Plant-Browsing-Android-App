@@ -7,11 +7,11 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:paddingTop="24dp"
-    android:clipToPadding="false"
-    tools:context=".ui.MainActivity">
+    android:clipToPadding="false">
+
 
     <LinearLayout
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -49,7 +49,7 @@
             android:id="@+id/searchEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             android:layout_marginBottom="30dp"
             android:hint="Search..."
             android:background="@drawable/rounded_box"
@@ -152,24 +152,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Top Picks"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textStyle="bold"
-            android:textColor="@color/green"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp" />
+            android:textColor="@color/black"
+            android:layout_marginTop="24dp"
+            android:layout_gravity="center"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/topPicksRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="24dp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:padding="12dp"
             android:clipToPadding="false"
-            android:scrollbars="horizontal"
-            android:orientation="horizontal"
-            tools:listitem="@layout/top_pick_card" />
+            />
 
     </LinearLayout>
 
@@ -186,6 +181,7 @@
         app:itemIconSize="30dp"
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@color/transparent"
+        app:itemBackground="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_nav" />
 
