@@ -45,15 +45,25 @@
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/searchEditText"
+<!--        <EditText-->
+<!--            android:id="@+id/searchEditText"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="30dp"-->
+<!--            android:layout_marginBottom="30dp"-->
+<!--            android:hint="Search..."-->
+<!--            android:background="@drawable/rounded_box"-->
+<!--            android:padding="12dp" />-->
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/searchView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="30dp"
-            android:hint="Search..."
+            app:queryHint="Search..."
             android:background="@drawable/rounded_box"
-            android:padding="12dp" />
+            android:padding="12dp"/>
 
         <!-- Categories (Indoor, Flowering, Edible) -->
         <LinearLayout

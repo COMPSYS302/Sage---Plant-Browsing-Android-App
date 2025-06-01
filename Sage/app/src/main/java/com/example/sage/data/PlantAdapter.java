@@ -18,6 +18,11 @@ import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
 
+//    public void setFilteredList(List<Plant> filteredList) {
+//        this.plantList = filteredList;
+//        notifyDataSetChanged();
+//    }
+
     // Holds the current list of plants to display
     private List<Plant> plantList;
 
