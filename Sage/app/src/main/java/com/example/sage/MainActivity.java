@@ -1,6 +1,7 @@
 package com.example.sage;
 
 import android.content.ClipData;
+import android.content.ClipData;
 import android.os.Bundle;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,20 +15,20 @@ import androidx.appcompat.widget.SearchView;
 import com.example.sage.data.Plant;
 import com.example.sage.data.PlantAdapter;
 import com.example.sage.data.FirestoreManager;
-import com.example.sage.data.Plant;
-import com.example.sage.data.PlantAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.Collections;
 import java.util.List;
-
 import java.util.ArrayList;
-import java.util.List;
+
+
 
 public class MainActivity extends AppCompatActivity {
 
     private SearchView searchView;
 //    private List<Plant> itemList;
+
+
 
     private FirestoreManager firestoreManager;
     private RecyclerView topPicksRecyclerView;
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 //            PlantAdapter.setFilteredList(filteredList);
 //        }
 //    }
+
 
     /**
      * Opens ShopActivity with the selected category as a filter.
