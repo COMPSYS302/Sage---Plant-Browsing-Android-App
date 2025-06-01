@@ -9,16 +9,18 @@
     android:paddingTop="24dp"
     android:clipToPadding="false">
 
-
     <LinearLayout
-        android:layout_marginTop="15dp"
+        android:id="@+id/container"
+        android:layout_above="@id/bottomNavigationView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:clipToPadding="false">
 
         <LinearLayout
+            android:layout_marginTop="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -45,25 +47,21 @@
 
         </LinearLayout>
 
-<!--        <EditText-->
-<!--            android:id="@+id/searchEditText"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginTop="30dp"-->
-<!--            android:layout_marginBottom="30dp"-->
-<!--            android:hint="Search..."-->
-<!--            android:background="@drawable/rounded_box"-->
-<!--            android:padding="12dp" />-->
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/searchView"
+        <AutoCompleteTextView
+            android:id="@+id/searchAutoComplete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Search plants..."
+            android:inputType="text"
+            android:padding="12dp"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="30dp"
-            app:queryHint="Search..."
             android:background="@drawable/rounded_box"
-            android:padding="12dp"/>
+            android:dropDownHeight="wrap_content"
+            android:dropDownVerticalOffset="8dp"
+            android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="8dp" />
+
 
         <!-- Categories (Indoor, Flowering, Edible) -->
         <LinearLayout
@@ -166,15 +164,17 @@
             android:textStyle="bold"
             android:textColor="@color/black"
             android:layout_marginTop="24dp"
-            android:layout_gravity="center"/>
+            android:layout_marginBottom="24dp"
+            android:layout_gravity="center" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/topPicksRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:padding="12dp"
             android:clipToPadding="false"
-            />
+            android:scrollbars="vertical" />
 
     </LinearLayout>
 
@@ -190,8 +190,6 @@
         android:elevation="2dp"
         app:itemIconSize="30dp"
         app:itemIconTint="@drawable/item_selector"
-        app:itemRippleColor="@color/transparent"
-        app:itemBackground="@android:color/transparent"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/bottom_nav" />
 

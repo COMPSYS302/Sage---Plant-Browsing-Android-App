@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import android.widget.AutoCompleteTextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -24,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sage.data.PlantAdapter;
 import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
+import com.example.sage.SearchBarHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -41,6 +43,8 @@ public class ShopActivity extends AppCompatActivity {
     private boolean isFilterActive = false; // Tracks if a category filter is applied
     private String selectedCategory = "All"; // Currently selected filter category
 
+    private FirestoreManager firestoreManager = new FirestoreManager();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,10 @@ public class ShopActivity extends AppCompatActivity {
         // Setup RecyclerView with 2 column grid layout
         recyclerView = findViewById(R.id.recyclerViewPlants);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+
+        // Search Bar
+        AutoCompleteTextView searchAutoComplete = findViewById(R.id.searchBar);
+        SearchBarHelper.setupPlantSearchBar(this, searchAutoComplete, firestoreManager);
 
         // Initialize filter icon
         filterIcon = findViewById(R.id.filterIcon);
@@ -70,6 +78,7 @@ public class ShopActivity extends AppCompatActivity {
     private void applyCategoryFilter(String category) {
         selectedCategory = category; // Remember selection
         isFilterActive = !category.equalsIgnoreCase("All");
+
 
         FirestoreManager.retrieveAllPlants(
                 plants -> {
@@ -232,7 +241,6 @@ public class ShopActivity extends AppCompatActivity {
                 }
         );
     }
-
 
     /**
      * Sets up the bottom navigation bar to navigate between activities.

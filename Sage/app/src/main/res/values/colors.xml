@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="navy">#090933</color>
     <color name="green">#0D986A</color>
-    <color name="transparent">#00F44336</color>
+    <color name="transparent">#00000000</color>
     <color name="mint">#DFEFEB</color>
     <color name="grey">#ABABAB</color>
     <color name="light_gray">#FDAFAAAA</color>

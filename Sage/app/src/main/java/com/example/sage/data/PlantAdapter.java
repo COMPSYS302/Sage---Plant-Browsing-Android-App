@@ -14,17 +14,16 @@ import com.bumptech.glide.Glide;
 import com.example.sage.R;
 import com.example.sage.ui.DetailsActivity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHolder> {
 
-//    public void setFilteredList(List<Plant> filteredList) {
-//        this.plantList = filteredList;
-//        notifyDataSetChanged();
-//    }
-
     // Holds the current list of plants to display
     private List<Plant> plantList;
+
+    // Backup full list for filtering purposes
+    private final List<Plant> fullPlantList;
 
     // Reference to FirestoreManager for incrementing views
     private final FirestoreManager firestoreManager;
@@ -34,15 +33,31 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
 
     // Constructor initializes the adapter with the plant list, FirestoreManager, and layout ID
     public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId) {
-        this.plantList = plantList;
+        this.plantList = new ArrayList<>(plantList);
+        this.fullPlantList = new ArrayList<>(plantList); // Store a full copy for filtering
         this.firestoreManager = firestoreManager;
         this.layoutId = layoutId;
     }
 
     // Replaces the existing data with a new filtered list
     public void updateData(List<Plant> newPlantList) {
-        this.plantList = newPlantList;
+        this.plantList = new ArrayList<>(newPlantList);
         notifyDataSetChanged(); // Notify the RecyclerView to refresh
+    }
+
+    // Filters the list based on a search query
+    public void setFilteredList(String query) {
+        List<Plant> filteredList = new ArrayList<>();
+
+        for (Plant plant : fullPlantList) {
+            if (plant.getName().toLowerCase().contains(query.toLowerCase()) ||
+                    plant.getCategory().toLowerCase().contains(query.toLowerCase())) {
+                filteredList.add(plant);
+            }
+        }
+
+        plantList = filteredList;
+        notifyDataSetChanged();
     }
 
     // Inflates the item layout and returns a new ViewHolder

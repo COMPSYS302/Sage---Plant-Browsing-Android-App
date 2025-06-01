@@ -30,18 +30,21 @@
         android:layout_margin="20dp"
         android:gravity="center_vertical">
 
-        <!-- Search EditText -->
-        <EditText
-            android:id="@+id/searchEditText"
+        <!-- Search Bar -->
+        <AutoCompleteTextView
+            android:id="@+id/searchBar"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1.5"
             android:hint="Search..."
+            android:inputType="text"
             android:padding="12dp"
             android:background="@drawable/rounded_box"
             android:fontFamily="@font/quicksand_semibold"
             android:drawableStart="@drawable/ic_search"
-            android:drawablePadding="10dp" />
+            android:drawablePadding="10dp"
+            android:dropDownHeight="wrap_content"
+            android:dropDownVerticalOffset="8dp" />
 
         <!-- Filter Icon/Button -->
         <ImageView
