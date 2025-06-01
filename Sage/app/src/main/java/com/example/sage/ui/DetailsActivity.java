@@ -34,15 +34,12 @@ public class DetailsActivity extends AppCompatActivity {
         });
 
         // Carousel setup
-        List<Integer> carouselImages = Arrays.asList(
-                R.drawable.ic_flowering,
-                R.drawable.ic_flowering,
-                R.drawable.ic_flowering
-        );
+        List<String> imageUrls = getIntent().getStringArrayListExtra("plant_images");
 
         ViewPager2 viewPager = findViewById(R.id.image_carousel);
-        ImageCarouselAdapter adapter = new ImageCarouselAdapter(carouselImages);
+        ImageCarouselAdapter adapter = new ImageCarouselAdapter(imageUrls);
         viewPager.setAdapter(adapter);
+
 
         TabLayout tabLayout = findViewById(R.id.image_dots);
 

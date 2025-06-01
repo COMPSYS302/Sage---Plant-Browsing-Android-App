@@ -136,7 +136,9 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                 intent.putExtra("plant_water", plant.getWater());
                 intent.putExtra("plant_season", plant.getSeason());
                 // intent.putExtra("plant_image", plant.getImageResource()); // not implemented yet
-
+                if (plant.getImages() != null && !plant.getImages().isEmpty()) {
+                    intent.putStringArrayListExtra("plant_images", new ArrayList<>(plant.getImages()));
+                }
                 v.getContext().startActivity(intent);
             });
         }
