@@ -16,7 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Search bar athstetics added to the app functionalities still being implemented." />
+    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="workspace.xml update" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -218,7 +218,15 @@
       <option name="project" value="LOCAL" />
       <updated>1748414318529</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="workspace.xml update">
+      <option name="closed" value="true" />
+      <created>1748414365744</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1748414365744</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -237,7 +245,8 @@
     <MESSAGE value="image updated" />
     <MESSAGE value="Basic Imports for FavouritesActivity add to .java file" />
     <MESSAGE value="Search bar athstetics added to the app functionalities still being implemented." />
-    <option name="LAST_COMMIT_MESSAGE" value="Search bar athstetics added to the app functionalities still being implemented." />
+    <MESSAGE value="workspace.xml update" />
+    <option name="LAST_COMMIT_MESSAGE" value="workspace.xml update" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
