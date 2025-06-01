@@ -178,7 +178,7 @@
 
         <!-- “Add to Favourites” button -->
         <Button
-            android:id="@+id/btn_favourite"
+            android:id="@+id/favButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add to Favourites"

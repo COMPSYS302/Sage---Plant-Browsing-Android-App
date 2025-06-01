@@ -67,7 +67,9 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show();
-                        redirectToMain();
+                        // Notify caller (DetailsActivity/MainActivity) login succeeded and finish
+                        setResult(RESULT_OK);
+                        finish();
                     } else {
                         Toast.makeText(this, "Login failed: " + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }
@@ -79,7 +81,9 @@ public class LoginActivity extends AppCompatActivity {
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
-                        redirectToMain();
+                        // Notify caller that signup/login succeeded, then finish
+                        setResult(RESULT_OK);
+                        finish();
                     } else {
                         String error = task.getException() != null ? task.getException().getMessage() : "Sign up failed.";
                         showSignUpError(error);
@@ -87,21 +91,22 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
-    private void showSignUpError(String message) {
-        if (message.contains("already in use")) {
-            Toast.makeText(this, "This email is already registered. Please log in instead.", Toast.LENGTH_LONG).show();
-        } else if (message.contains("badly formatted")) {
-            Toast.makeText(this, "Invalid email format. Please check and try again.", Toast.LENGTH_LONG).show();
-        } else if (message.contains("password")) {
-            Toast.makeText(this, "Password must be at least 6 characters.", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show();
-        }
-    }
 
-    private void redirectToMain() {
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish(); // Close LoginActivity
+private void showSignUpError(String message) {
+    if (message.contains("already in use")) {
+        Toast.makeText(this, "This email is already registered. Please log in instead.", Toast.LENGTH_LONG).show();
+    } else if (message.contains("badly formatted")) {
+        Toast.makeText(this, "Invalid email format. Please check and try again.", Toast.LENGTH_LONG).show();
+    } else if (message.contains("password")) {
+        Toast.makeText(this, "Password must be at least 6 characters.", Toast.LENGTH_LONG).show();
+    } else {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+}
+
+private void redirectToMain() {
+    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+    startActivity(intent);
+    finish(); // Close LoginActivity
+}
 }
