@@ -11,9 +11,16 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FirestoreManager {
     private static final String TAG = "FirestoreManager";
@@ -107,6 +114,36 @@ public class FirestoreManager {
                     Log.e("Firestore", "Error fetching plants", e);
                     listener.onDataLoaded(null);
                 });
+    }
+    public void createUserWithEmail(
+            String email,
+            String password,
+            String username,
+            OnSuccessListener<Void> onSuccess,
+            OnFailureListener onFailure
+    ) {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnSuccessListener(authResult -> {
+                    String userId = authResult.getUser().getUid();
+
+                    // Create user data map
+                    Map<String, Object> userData = new HashMap<>();
+                    userData.put("email", email);
+                    userData.put("username", username);
+                    // we explicited store id(integer) of plant, as this reduce the size in database
+                    userData.put("favourites", new ArrayList<Integer>()); // empty list for now
+
+                    // Store user profile in Firestore
+                    db.collection("users")
+                            .document(userId)
+                            .set(userData)
+                            .addOnSuccessListener(onSuccess)
+                            .addOnFailureListener(onFailure);
+                })
+                .addOnFailureListener(onFailure);
     }
 
 

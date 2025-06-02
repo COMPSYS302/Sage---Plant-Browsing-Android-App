@@ -2,6 +2,7 @@ package com.example.sage;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -82,6 +83,18 @@ public class MainActivity extends AppCompatActivity {
         ImageView profileIcon = findViewById(R.id.profileIcon);
         profileIcon.setOnClickListener(view -> showProfileMenu(view));
 
+        // TEMPORARY: call createUserWithEmail directly for testing
+        firestoreManager.createUserWithEmail(
+                "testuser@example.com",           // Replace with test email
+                "password123",                    // Replace with test password (min 6 characters)
+                "TestUser",                       // Username
+                unused -> {
+                    Log.d("MainActivity", "✅ User created successfully.");
+                },
+                error -> {
+                    Log.e("MainActivity", "❌ Failed to create user: " + error.getMessage());
+                }
+        );
     }
 
     private void openShopWithFilter(String category) {
