@@ -27,6 +27,7 @@ import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
 import com.example.sage.SearchBarHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -258,9 +259,15 @@ public class ShopActivity extends AppCompatActivity {
                 finish();
                 return true;
             } else if (itemId == R.id.bottom_favourites) {
-                startActivity(new Intent(this, FavouritesActivity.class));
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    // Not signed in, go to login
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.putExtra("redirectTo", "favourites"); // Redirect back after login
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, FavouritesActivity.class));
+                }
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                finish();
                 return true;
             }
             return false;

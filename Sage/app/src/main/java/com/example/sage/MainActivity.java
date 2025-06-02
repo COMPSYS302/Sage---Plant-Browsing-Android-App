@@ -74,7 +74,14 @@ public class MainActivity extends AppCompatActivity {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             } else if (id == R.id.bottom_favourites) {
-                startActivity(new Intent(this, FavouritesActivity.class));
+                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                    // Not signed in, go to login
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    intent.putExtra("redirectTo", "favourites"); // Redirect back after login
+                    startActivity(intent);
+                } else {
+                    startActivity(new Intent(this, FavouritesActivity.class));
+                }
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 return true;
             } else if (id == R.id.bottom_home) {

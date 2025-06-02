@@ -155,7 +155,14 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Method to add the current plant to favourites
     private void addToFavourites() {
-        // TODO: Implement Firestore logic here to save the favourite plant for the user
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            // Not signed in — go to login
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("redirectTo", "favourites"); // Redirect after login
+            startActivity(intent);
+        } else {
+            // TODO: Implement Firestore logic here to save the favourite plant for the user
+        }
 
         // Show confirmation message
         Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
