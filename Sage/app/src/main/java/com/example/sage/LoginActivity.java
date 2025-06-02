@@ -52,6 +52,16 @@ public class LoginActivity extends AppCompatActivity {
         errorText = findViewById(R.id.textViewError);
         forgotPasswordText = findViewById(R.id.textViewForgotPassword);
 
+        String mode = getIntent().getStringExtra("mode");
+        if ("signup".equals(mode)) {
+            isLoginMode = false;
+            authButton.setText("Sign Up");
+            toggleText.setText("Already have an account? Login");
+            confirmPasswordEditText.setVisibility(View.VISIBLE);
+            forgotPasswordText.setVisibility(View.GONE);
+        }
+
+
         // Set initial button click listener for login/sign-up
         authButton.setOnClickListener(v -> handleAuth());
 

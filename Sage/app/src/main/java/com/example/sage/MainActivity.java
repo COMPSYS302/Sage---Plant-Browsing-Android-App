@@ -134,6 +134,11 @@ public class MainActivity extends AppCompatActivity {
                 // Navigate to login screen
                 startActivity(new Intent(this, LoginActivity.class));
                 return true;
+            } else if (id == R.id.menu_signup) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                intent.putExtra("mode", "signup");
+                startActivity(intent);
+                return true;
             } else if (id == R.id.menu_logout) {
                 // Sign out user and show message
                 FirebaseAuth.getInstance().signOut();
