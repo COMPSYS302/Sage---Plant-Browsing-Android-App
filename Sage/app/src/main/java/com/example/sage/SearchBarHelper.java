@@ -3,8 +3,10 @@ package com.example.sage;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Toast;
 
 import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
@@ -45,6 +47,7 @@ public class SearchBarHelper {
                     String selectedName = (String) parent.getItemAtPosition(position);
                     Plant selectedPlant = plantMap.get(selectedName);
                     if (selectedPlant != null) {
+                        ArrayList<String> imageUrls = new ArrayList<>(selectedPlant.getImages()); // convert List to ArrayList
                         Intent intent = new Intent(activity, DetailsActivity.class);
                         intent.putExtra("plant_name", selectedPlant.getName());
                         intent.putExtra("plant_category", selectedPlant.getCategory());
@@ -52,8 +55,20 @@ public class SearchBarHelper {
                         intent.putExtra("plant_sunlight", selectedPlant.getSunlight());
                         intent.putExtra("plant_water", selectedPlant.getWater());
                         intent.putExtra("plant_season", selectedPlant.getSeason());
+                        intent.putExtra("plant_description", selectedPlant.getDescription());
+                        intent.putStringArrayListExtra("plant_images", imageUrls);
                         activity.startActivity(intent);
+
+                        try {
+                            activity.startActivity(intent);
+                        } catch (Exception e) {
+                            Log.e("SearchBarDebug", "Failed to open DetailsActivity", e);
+                            Toast.makeText(activity, "Error: couldn't open DetailsActivity", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(activity, "Couldn't find plant data for " + selectedName, Toast.LENGTH_SHORT).show();
                     }
+
                 });
             }
         });

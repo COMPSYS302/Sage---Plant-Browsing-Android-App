@@ -67,7 +67,7 @@
 
         </LinearLayout>
 
-
+        <!--Search Bar -->
         <AutoCompleteTextView
             android:id="@+id/searchAutoComplete"
             android:layout_width="match_parent"
