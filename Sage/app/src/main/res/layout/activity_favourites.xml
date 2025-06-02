@@ -2,38 +2,68 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
+    android:id="@+id/favourites_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FavouritesActivity">
+    android:paddingTop="20dp"
+    android:background="@color/white"
+    tools:context=".ui.FavouritesActivity">
 
+    <!-- Title -->
     <TextView
+        android:id="@+id/favouritesTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Favourites"
-        android:textSize = "36sp"
-        android:textColor = "@color/green"
-        android:layout_centerInParent="true"/>
+        android:textSize="36sp"
+        android:textColor="@color/green"
+        android:fontFamily="@font/quicksand_semibold"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
 
+    <!-- Total Value -->
+    <TextView
+        android:id="@+id/totalValueText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Value: $0.00"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:layout_below="@id/favouritesTitle"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/quicksand_semibold" />
+
+    <!-- RecyclerView for favourite plants -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewFavourites"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/totalValueText"
+        android:layout_above="@id/bottomNavigationView"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="20dp"
+        android:scrollbars="vertical"
+        tools:listitem="@layout/item_plant" />
+
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bottomNavigationView"
         android:layout_alignParentBottom="true"
         android:background="@drawable/bottom_background"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginBottom="30dp"
-        android:layout_marginTop="30dp"
         android:elevation="2dp"
         app:menu="@menu/bottom_nav"
         app:itemIconSize="30dp"
         app:itemIconTint="@drawable/item_selector"
         app:itemRippleColor="@color/transparent"
-        app:labelVisibilityMode="unlabeled"/>
-
-
-
-
+        app:labelVisibilityMode="unlabeled" />
 
 </RelativeLayout>

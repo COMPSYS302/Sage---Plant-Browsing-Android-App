@@ -163,6 +163,25 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
+    public void getFavouriteIdsByEmail(String email, OnSuccessListener<List<Integer>> onSuccess, OnFailureListener onFailure) {
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .get()
+                .addOnSuccessListener(querySnapshots -> {
+                    if (!querySnapshots.isEmpty()) {
+                        DocumentSnapshot doc = querySnapshots.getDocuments().get(0);
+                        List<Long> favRaw = (List<Long>) doc.get("favourites");
+                        List<Integer> result = new ArrayList<>();
+                        if (favRaw != null) {
+                            for (Long l : favRaw) result.add(l.intValue());
+                        }
+                        onSuccess.onSuccess(result);
+                    } else {
+                        onSuccess.onSuccess(new ArrayList<>()); // No user found
+                    }
+                })
+                .addOnFailureListener(onFailure);
+    }
 
 }
 
