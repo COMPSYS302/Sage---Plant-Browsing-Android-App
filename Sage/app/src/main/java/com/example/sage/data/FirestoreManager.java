@@ -118,7 +118,6 @@ public class FirestoreManager {
     public void createUserWithEmail(
             String email,
             String password,
-            String username,
             OnSuccessListener<Void> onSuccess,
             OnFailureListener onFailure
     ) {
@@ -132,11 +131,11 @@ public class FirestoreManager {
                     // Create user data map
                     Map<String, Object> userData = new HashMap<>();
                     userData.put("email", email);
-                    userData.put("username", username);
-                    // we explicited store id(integer) of plant, as this reduce the size in database
-                    userData.put("favourites", new ArrayList<Integer>()); // empty list for now
 
-                    // Store user profile in Firestore
+                    // We explicitly store only the integer ID of each favorite plant
+                    userData.put("favourites", new ArrayList<Integer>());
+
+                    // Store user profile in Firestore under 'users' collection
                     db.collection("users")
                             .document(userId)
                             .set(userData)
@@ -145,7 +144,6 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
-
 
 }
 
