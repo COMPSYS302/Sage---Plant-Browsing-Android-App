@@ -22,6 +22,8 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import com.example.sage.data.FirestoreManager;
+
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
@@ -31,6 +33,9 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Flag to track if user tried to add to favourites but needs to login first
     private boolean pendingFavourite = false;
+
+    //store the plantID
+    private int plantId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +142,9 @@ public class DetailsActivity extends AppCompatActivity {
         waterView.setText(water);
         seasonView.setText(season);
         descriptionView.setText(description);
+
+        //store the plantid for addToFavourites() method
+        plantId = getIntent().getIntExtra("plant_id",-1);
     }
 
     // Handle result returned from LoginActivity when user logs in or cancels
@@ -155,19 +163,42 @@ public class DetailsActivity extends AppCompatActivity {
 
     // Method to add the current plant to favourites
     private void addToFavourites() {
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // Not signed in — go to login
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser == null) {
+            // User is not signed in, redirect to login
             Intent intent = new Intent(this, LoginActivity.class);
-            intent.putExtra("redirectTo", "favourites"); // Redirect after login
+            intent.putExtra("redirectTo", "favourites"); // Optional: handle redirect after login
             startActivity(intent);
-        } else {
-            // TODO: Implement Firestore logic here to save the favourite plant for the user
+            return;
         }
 
-        // Show confirmation message
-        Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
+        if (plantId == -1) {
+            // Plant ID was not passed properly
+            Toast.makeText(this, "Error: Plant ID is missing", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Reset the pending flag since action completed
-        pendingFavourite = false;
+        // Get user's email
+        String email = currentUser.getEmail();
+        if (email == null) {
+            Toast.makeText(this, "Error: Email not found", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Add plant ID to user's favourites in Firestore
+        FirestoreManager firestoreManager = new FirestoreManager();
+        firestoreManager.addIdToFavourite(
+                plantId,
+                email,
+                unused -> {
+                    Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
+                    pendingFavourite = false;
+                },
+                error -> {
+                    Toast.makeText(this, "Failed to add to favourites: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    pendingFavourite = false;
+                }
+        );
     }
 }

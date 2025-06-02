@@ -129,6 +129,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
 
                 // Start DetailsActivity with plant data
                 Intent intent = new Intent(v.getContext(), DetailsActivity.class);
+                intent.putExtra("plant_id", plant.getPlantid());
                 intent.putExtra("plant_name", plant.getName());
                 intent.putExtra("plant_category", plant.getCategory());
                 intent.putExtra("plant_price", plant.getPrice());
