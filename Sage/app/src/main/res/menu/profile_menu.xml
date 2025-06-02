@@ -3,8 +3,15 @@
 
     <item
         android:id="@+id/menu_login"
-        android:title="Log In" />
+        android:title="Login" />
+    <item
+        android:id="@+id/menu_signup"
+        android:title="Sign Up" />
+    <item
+        android:id="@+id/menu_delete_account"
+        android:title="Delete Account" />
     <item
         android:id="@+id/menu_logout"
-        android:title="Log Out" />
+        android:title="Logout" />
+
 </menu>
