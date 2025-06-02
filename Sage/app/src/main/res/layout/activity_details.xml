@@ -15,18 +15,17 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/details_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingTop="24dp"
-            android:gravity="center_horizontal">
+            android:gravity="center_horizontal"
+            android:paddingTop="24dp">
 
             <!-- Image Carousel -->
             <androidx.viewpager2.widget.ViewPager2
@@ -34,20 +33,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginBottom="8dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                />
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/image_dots"
+            <!-- Centered Dots -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="fixed" />
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/image_dots"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="fixed" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
