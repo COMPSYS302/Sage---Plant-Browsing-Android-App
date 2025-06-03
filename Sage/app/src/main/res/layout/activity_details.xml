@@ -176,6 +176,7 @@
         <TextView
             android:id="@+id/about_label"
             android:layout_width="wrap_content"
+            android:fontFamily="@font/quicksand_semibold"
             android:layout_height="wrap_content"
             android:text="About"
             android:textSize="20dp"
@@ -186,7 +187,7 @@
             android:id="@+id/plant_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="14dp"
+            android:textSize="16dp"
             android:layout_marginTop="8dp"/>
 
         <!-- “Add to Favourites” button -->
@@ -195,6 +196,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Add to Favourites"
+            android:fontFamily="@font/quicksand_semibold"
             android:layout_marginTop="26dp"
             android:backgroundTint="@color/green"
             android:textColor="@android:color/white"/>

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -40,6 +41,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.green));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.green));
 
         // Initialize Firebase Auth
         firebaseAuth = FirebaseAuth.getInstance();

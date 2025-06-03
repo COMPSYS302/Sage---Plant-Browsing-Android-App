@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.core.content.ContextCompat;
 
 import com.example.sage.data.FirestoreManager;
 
@@ -22,6 +23,10 @@ public class LoadingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.green));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.green));
+
 
         firestoreManager = new FirestoreManager();
         startTime = System.currentTimeMillis();
