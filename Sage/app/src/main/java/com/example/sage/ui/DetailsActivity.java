@@ -101,6 +101,7 @@ public class DetailsActivity extends AppCompatActivity {
 
         // Plant details
         String name = getIntent().getStringExtra("plant_name");
+        String category = getIntent().getStringExtra("plant_category");
         double price = getIntent().getDoubleExtra("plant_price", 0.0);
         String sunlight = getIntent().getStringExtra("plant_sunlight");
         String water = getIntent().getStringExtra("plant_water");
@@ -109,6 +110,7 @@ public class DetailsActivity extends AppCompatActivity {
         plantId = getIntent().getIntExtra("plant_id", -1);
 
         ((TextView) findViewById(R.id.plant_name)).setText(name != null ? name : "Unknown Plant");
+        ((TextView) findViewById(R.id.plant_category)).setText(getIntent().getStringExtra("plant_category"));
         ((TextView) findViewById(R.id.plant_price)).setText(getString(R.string.price_format, price));
         ((TextView) findViewById(R.id.plant_sunlight)).setText(sunlight != null ? sunlight : "N/A");
         ((TextView) findViewById(R.id.plant_water)).setText(water != null ? water : "N/A");
