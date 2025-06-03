@@ -43,27 +43,11 @@ public class MainActivity extends AppCompatActivity {
         topPicksRecyclerView = findViewById(R.id.topPicksRecyclerView);
         topPicksRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // Load and display top 3 most viewed plants
-        firestoreManager.getAllPlants(plants -> {
-            if (plants != null && !plants.isEmpty()) {
-                // Randomize first to break ties
-                Collections.shuffle(plants);
-                // Sort by views descending
-                Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
-
-                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));
-                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card);
-                topPicksRecyclerView.setAdapter(topPicksAdapter);
-            } else {
-                Toast.makeText(this, "No plants found", Toast.LENGTH_SHORT).show();
-            }
-        });
-
         // Search Bar
         AutoCompleteTextView searchAutoComplete = findViewById(R.id.searchAutoComplete);
         SearchBarHelper.setupPlantSearchBar(this, searchAutoComplete, firestoreManager);
 
-// Set up bottom navigation
+        // Set up bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_home);
 
@@ -104,6 +88,30 @@ public class MainActivity extends AppCompatActivity {
         // Profile icon click opens popup menu
         ImageView profileIcon = findViewById(R.id.profileIcon);
         profileIcon.setOnClickListener(this::showProfileMenu);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Load and display top 3 most viewed plants whenever activity resumes
+        loadTopPicks();
+    }
+
+    private void loadTopPicks() {
+        firestoreManager.getAllPlants(plants -> {
+            if (plants != null && !plants.isEmpty()) {
+                // Randomize first to break ties
+                Collections.shuffle(plants);
+                // Sort by views descending
+                Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
+
+                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));
+                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card);
+                topPicksRecyclerView.setAdapter(topPicksAdapter);
+            } else {
+                Toast.makeText(this, "No plants found", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void openShopWithFilter(String category) {
@@ -187,6 +195,6 @@ public class MainActivity extends AppCompatActivity {
                 .show();
 
     }
-
-
 }
+
+

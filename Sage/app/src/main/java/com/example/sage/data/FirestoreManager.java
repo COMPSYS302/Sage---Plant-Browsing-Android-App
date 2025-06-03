@@ -47,6 +47,8 @@ public class FirestoreManager {
                     }
                 });
     }
+
+
     public void retrievePlantById(int plantId, OnSuccessListener<Plant> onSuccess, OnFailureListener onFailure) {
         db.collection(COLLECTION_NAME)
                 .document(String.valueOf(plantId))

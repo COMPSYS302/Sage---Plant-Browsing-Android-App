@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,6 +62,8 @@ public class LoginActivity extends AppCompatActivity {
             forgotPasswordText.setVisibility(View.GONE);
         }
 
+        // Enable edge-to-edge
+        EdgeToEdge.enable(this);
 
         // Set initial button click listener for login/sign-up
         authButton.setOnClickListener(v -> handleAuth());
