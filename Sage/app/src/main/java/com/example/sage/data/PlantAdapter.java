@@ -31,6 +31,9 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     // Layout resource ID for inflating different layouts
     private final int layoutId;
 
+    private List<Integer> favouriteIds = new ArrayList<>(); // Optional, empty by default
+
+
     // Constructor initializes the adapter with the plant list, FirestoreManager, and layout ID
     public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId) {
         this.plantList = new ArrayList<>(plantList);
@@ -144,6 +147,8 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                 }
                 v.getContext().startActivity(intent);
             });
+
+
         }
     }
 }

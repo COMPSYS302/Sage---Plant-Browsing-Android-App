@@ -182,7 +182,7 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
-    public void deleteFavouriteByIdAndEmail(int plantId, String email, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
+    public void deleteFavourite(int plantId, String email, OnSuccessListener<Void> onSuccess, OnFailureListener onFailure) {
         db.collection("users")
                 .whereEqualTo("email", email)
                 .limit(1)
@@ -201,7 +201,7 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
-    public void checkFavouriteByIdAndEmail(int plantId, String email, OnSuccessListener<Boolean> onSuccess, OnFailureListener onFailure) {
+    public void checkFavourite(int plantId, String email, OnSuccessListener<Boolean> onSuccess, OnFailureListener onFailure) {
         db.collection("users")
                 .whereEqualTo("email", email)
                 .limit(1)

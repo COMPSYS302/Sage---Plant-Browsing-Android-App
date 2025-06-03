@@ -8,6 +8,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -17,33 +19,27 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.example.sage.LoginActivity;
 import com.example.sage.R;
 import com.example.sage.data.ImageCarouselAdapter;
+import com.example.sage.data.FirestoreManager;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import com.example.sage.data.FirestoreManager;
-
 import java.util.List;
 
 public class DetailsActivity extends AppCompatActivity {
 
-    // Request code for starting LoginActivity and receiving a result back
-    private static final int LOGIN_REQUEST_CODE = 1001;
-
-    // Flag to track if user tried to add to favourites but needs to login first
     private boolean pendingFavourite = false;
-
-    //store the plantID
     private int plantId = -1;
+    private Button favButton;
+    private boolean isCurrentlyFavourite = false;
+
+    private ActivityResultLauncher<Intent> loginLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         EdgeToEdge.enable(this);
-
-        // Set the layout file for this activity
         setContentView(R.layout.activity_details);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.details_root), (view, insets) -> {
@@ -52,54 +48,48 @@ public class DetailsActivity extends AppCompatActivity {
             return insets;
         });
 
-        // Find the "Add to favourites" button in the layout
-        Button favButton = findViewById(R.id.favButton);
+        // Register ActivityResultLauncher
+        loginLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && pendingFavourite) {
+                        addToFavourites();
+                    }
+                }
+        );
 
-        // Set click listener on the favourites button
+        favButton = findViewById(R.id.favButton);
         favButton.setOnClickListener(view -> {
-            // Get the current logged-in Firebase user
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
             if (user == null) {
-                // User is not logged in, so set flag and start LoginActivity for result
                 pendingFavourite = true;
                 Intent loginIntent = new Intent(DetailsActivity.this, LoginActivity.class);
-                startActivityForResult(loginIntent, LOGIN_REQUEST_CODE);
+                loginLauncher.launch(loginIntent);
             } else {
-                // User is logged in, proceed to add to favourites immediately
-                addToFavourites(); // Implement your Firestore logic here
+                addToFavourites();
             }
         });
 
-        // Get plant images URLs passed from previous activity for the image carousel
+        // Carousel
         List<String> imageUrls = getIntent().getStringArrayListExtra("plant_images");
-
-        // Setup the ViewPager2 to display images
         ViewPager2 viewPager = findViewById(R.id.image_carousel);
         ImageCarouselAdapter adapter = new ImageCarouselAdapter(imageUrls);
         viewPager.setAdapter(adapter);
 
-        // Setup TabLayout to show dots indicating current image in carousel
         TabLayout tabLayout = findViewById(R.id.image_dots);
-
-        // Connect TabLayout with ViewPager2 using TabLayoutMediator
         new TabLayoutMediator(tabLayout, viewPager, (tab, position) -> {
             ImageView dot = new ImageView(this);
-            dot.setImageResource(R.drawable.dot_inactive); // default state is inactive dot
+            dot.setImageResource(R.drawable.dot_inactive);
             tab.setCustomView(dot);
         }).attach();
 
-        // Update the dots as the user scrolls through images
         viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-
-                // Loop through all tabs (dots)
                 for (int i = 0; i < tabLayout.getTabCount(); i++) {
                     TabLayout.Tab tab = tabLayout.getTabAt(i);
-
-                    // Change dot drawable to active/inactive based on current page
                     if (tab != null && tab.getCustomView() instanceof ImageView) {
                         ((ImageView) tab.getCustomView()).setImageResource(
                                 i == position ? R.drawable.dot_active : R.drawable.dot_inactive
@@ -109,97 +99,71 @@ public class DetailsActivity extends AppCompatActivity {
             }
         });
 
-        // Retrieve plant details passed from the previous activity
+        // Plant details
         String name = getIntent().getStringExtra("plant_name");
-        if (name == null) name = "Unknown Plant";  // fallback default
-
         double price = getIntent().getDoubleExtra("plant_price", 0.0);
-
         String sunlight = getIntent().getStringExtra("plant_sunlight");
-        if (sunlight == null) sunlight = "N/A";
-
         String water = getIntent().getStringExtra("plant_water");
-        if (water == null) water = "N/A";
-
         String season = getIntent().getStringExtra("plant_season");
-        if (season == null) season = "N/A";
-
         String description = getIntent().getStringExtra("plant_description");
-        if (description == null) description = "No description available.";
+        plantId = getIntent().getIntExtra("plant_id", -1);
 
-        // Find the TextViews in layout for displaying plant details
-        TextView descriptionView = findViewById(R.id.plant_description);
-        TextView nameView = findViewById(R.id.plant_name);
-        TextView priceView = findViewById(R.id.plant_price);
-        TextView sunlightView = findViewById(R.id.plant_sunlight);
-        TextView waterView = findViewById(R.id.plant_water);
-        TextView seasonView = findViewById(R.id.plant_season);
+        ((TextView) findViewById(R.id.plant_name)).setText(name != null ? name : "Unknown Plant");
+        ((TextView) findViewById(R.id.plant_price)).setText(getString(R.string.price_format, price));
+        ((TextView) findViewById(R.id.plant_sunlight)).setText(sunlight != null ? sunlight : "N/A");
+        ((TextView) findViewById(R.id.plant_water)).setText(water != null ? water : "N/A");
+        ((TextView) findViewById(R.id.plant_season)).setText(season != null ? season : "N/A");
+        ((TextView) findViewById(R.id.plant_description)).setText(description != null ? description : "No description available.");
 
-        // Set plant detail values into the views
-        nameView.setText(name);
-        priceView.setText(getString(R.string.price_format, price));
-        sunlightView.setText(sunlight);
-        waterView.setText(water);
-        seasonView.setText(season);
-        descriptionView.setText(description);
-
-        //store the plantid for addToFavourites() method
-        plantId = getIntent().getIntExtra("plant_id",-1);
-    }
-
-    // Handle result returned from LoginActivity when user logs in or cancels
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        // Check if this is the result from the login request and login was successful
-        if (requestCode == LOGIN_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (pendingFavourite) {
-                // User logged in, resume adding to favourites as intended before login
-                addToFavourites();
-            }
+        // Check if already in favourites
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null && plantId != -1) {
+            new FirestoreManager().checkFavourite(plantId, user.getEmail(), isFav -> {
+                isCurrentlyFavourite = isFav;
+                updateFavButtonText();
+            }, error -> Toast.makeText(this, "Error checking favourites", Toast.LENGTH_SHORT).show());
         }
     }
 
-    // Method to add the current plant to favourites
+    private void updateFavButtonText() {
+        favButton.setText(isCurrentlyFavourite ? "Remove from Favourites" : "Add to Favourites");
+    }
+
     private void addToFavourites() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser == null) {
-            // User is not signed in, redirect to login
             Intent intent = new Intent(this, LoginActivity.class);
-            intent.putExtra("redirectTo", "favourites"); // Optional: handle redirect after login
-            startActivity(intent);
+            intent.putExtra("redirectTo", "favourites");
+            loginLauncher.launch(intent);
             return;
         }
 
         if (plantId == -1) {
-            // Plant ID was not passed properly
             Toast.makeText(this, "Error: Plant ID is missing", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Get user's email
         String email = currentUser.getEmail();
         if (email == null) {
             Toast.makeText(this, "Error: Email not found", Toast.LENGTH_SHORT).show();
             return;
         }
 
-// Get FirestoreManager instance
         FirestoreManager firestoreManager = new FirestoreManager();
 
-        firestoreManager.checkFavouriteByIdAndEmail(
+        firestoreManager.checkFavourite(
                 plantId,
                 email,
                 isFavourite -> {
                     if (isFavourite) {
-                        // ❌ Already in favourites → Remove it
-                        firestoreManager.deleteFavouriteByIdAndEmail(
+                        firestoreManager.deleteFavourite(
                                 plantId,
                                 email,
                                 unused -> {
                                     Toast.makeText(this, "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                                    isCurrentlyFavourite = false;
+                                    updateFavButtonText();
                                     pendingFavourite = false;
                                 },
                                 error -> {
@@ -208,12 +172,13 @@ public class DetailsActivity extends AppCompatActivity {
                                 }
                         );
                     } else {
-                        // ✅ Not in favourites → Add it
                         firestoreManager.addIdToFavourite(
                                 plantId,
                                 email,
                                 unused -> {
                                     Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
+                                    isCurrentlyFavourite = true;
+                                    updateFavButtonText();
                                     pendingFavourite = false;
                                 },
                                 error -> {
@@ -228,6 +193,5 @@ public class DetailsActivity extends AppCompatActivity {
                     pendingFavourite = false;
                 }
         );
-
     }
 }

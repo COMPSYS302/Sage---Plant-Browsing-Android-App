@@ -26,6 +26,7 @@ public class FavouritesActivity extends AppCompatActivity {
     private TextView totalValueText;
     private PlantAdapter adapter;
     private FirestoreManager firestoreManager = new FirestoreManager();
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +34,17 @@ public class FavouritesActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_favourites);
 
+        // Setup RecyclerView to show plant cards in a 2-column grid
         recyclerView = findViewById(R.id.recyclerViewFavourites);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
+        // TextView to display the total value of favourite plants
         totalValueText = findViewById(R.id.totalValueText);
 
+        // Setup the bottom navigation menu
         setupBottomNavigation();
 
+        // Check if user is logged in; if not, redirect to LoginActivity
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser == null) {
             Intent loginIntent = new Intent(this, LoginActivity.class);
@@ -49,36 +54,49 @@ public class FavouritesActivity extends AppCompatActivity {
             return;
         }
 
-        String email = currentUser.getEmail();
+        // Get the user's email
+        email = currentUser.getEmail();
         if (email == null) {
             Toast.makeText(this, "User email not found.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        firestoreManager.getFavouriteIdsByEmail(email,
-                favouriteIds -> {
-                    FirestoreManager.retrieveAllPlants(allPlants -> {
-                        List<Plant> favourites = new ArrayList<>();
-                        double total = 0.0;
-
-                        for (Plant plant : allPlants) {
-                            if (favouriteIds.contains(plant.getPlantid())) {
-                                favourites.add(plant);
-                                total += plant.getPrice();
-                            }
-                        }
-
-                        totalValueText.setText("Total Value: $" + String.format("%.2f", total));
-
-                        adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant);
-                        recyclerView.setAdapter(adapter);
-
-                    }, e -> Toast.makeText(this, "Failed to retrieve plants: " + e.getMessage(), Toast.LENGTH_SHORT).show());
-                },
-                e -> Toast.makeText(this, "Failed to retrieve favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show()
-        );
+        // Load the user's favourite plants initially
+        loadFavourites();
     }
 
+    /**
+     * Loads the user's favourites from Firestore and updates the UI.
+     * This method can be called after adding/removing favourites to refresh the list.
+     */
+    public void loadFavourites() {
+        firestoreManager.getFavouriteIdsByEmail(email,
+                favouriteIds -> FirestoreManager.retrieveAllPlants(allPlants -> {
+                    List<Plant> favourites = new ArrayList<>();
+                    double total = 0.0;
+
+                    // Filter plants that match the user's favourite IDs
+                    for (Plant plant : allPlants) {
+                        if (favouriteIds.contains(plant.getPlantid())) {
+                            favourites.add(plant);
+                            total += plant.getPrice();
+                        }
+                    }
+
+                    // Display the total value of favourites
+                    totalValueText.setText("Total Value: $" + String.format("%.2f", total));
+
+                    // Set the adapter with the list of favourite plants
+                    adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant);
+                    recyclerView.setAdapter(adapter);
+
+                }, e -> Toast.makeText(this, "Failed to retrieve plants: " + e.getMessage(), Toast.LENGTH_SHORT).show()),
+                e -> Toast.makeText(this, "Failed to retrieve favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+    }
+
+    /**
+     * Initializes the bottom navigation bar and sets the current tab as selected.
+     */
     private void setupBottomNavigation() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.bottom_favourites);
@@ -86,13 +104,16 @@ public class FavouritesActivity extends AppCompatActivity {
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == R.id.bottom_favourites) {
+                // Already on Favourites screen
                 return true;
             } else if (id == R.id.bottom_shop) {
+                // Navigate to Shop screen
                 startActivity(new Intent(this, ShopActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
                 return true;
             } else if (id == R.id.bottom_home) {
+                // Navigate to Home screen
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();
@@ -100,5 +121,14 @@ public class FavouritesActivity extends AppCompatActivity {
             }
             return false;
         });
+    }
+
+    /**
+     * Automatically refresh favourites when the user returns to this screen.
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFavourites();
     }
 }

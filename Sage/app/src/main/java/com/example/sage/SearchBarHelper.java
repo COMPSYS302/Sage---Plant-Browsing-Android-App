@@ -49,6 +49,7 @@ public class SearchBarHelper {
                     if (selectedPlant != null) {
                         ArrayList<String> imageUrls = new ArrayList<>(selectedPlant.getImages()); // convert List to ArrayList
                         Intent intent = new Intent(activity, DetailsActivity.class);
+                        intent.putExtra("plant_id", selectedPlant.getPlantid());
                         intent.putExtra("plant_name", selectedPlant.getName());
                         intent.putExtra("plant_category", selectedPlant.getCategory());
                         intent.putExtra("plant_price", selectedPlant.getPrice());
