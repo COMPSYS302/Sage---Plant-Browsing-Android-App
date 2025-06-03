@@ -186,19 +186,48 @@ public class DetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // Add plant ID to user's favourites in Firestore
+// Get FirestoreManager instance
         FirestoreManager firestoreManager = new FirestoreManager();
-        firestoreManager.addIdToFavourite(
+
+        firestoreManager.checkFavouriteByIdAndEmail(
                 plantId,
                 email,
-                unused -> {
-                    Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
-                    pendingFavourite = false;
+                isFavourite -> {
+                    if (isFavourite) {
+                        // ❌ Already in favourites → Remove it
+                        firestoreManager.deleteFavouriteByIdAndEmail(
+                                plantId,
+                                email,
+                                unused -> {
+                                    Toast.makeText(this, "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                                    pendingFavourite = false;
+                                },
+                                error -> {
+                                    Toast.makeText(this, "Failed to remove favourite: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    pendingFavourite = false;
+                                }
+                        );
+                    } else {
+                        // ✅ Not in favourites → Add it
+                        firestoreManager.addIdToFavourite(
+                                plantId,
+                                email,
+                                unused -> {
+                                    Toast.makeText(this, "Added to Favourites!", Toast.LENGTH_SHORT).show();
+                                    pendingFavourite = false;
+                                },
+                                error -> {
+                                    Toast.makeText(this, "Failed to add to favourites: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    pendingFavourite = false;
+                                }
+                        );
+                    }
                 },
                 error -> {
-                    Toast.makeText(this, "Failed to add to favourites: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Error checking favourites: " + error.getMessage(), Toast.LENGTH_SHORT).show();
                     pendingFavourite = false;
                 }
         );
+
     }
 }

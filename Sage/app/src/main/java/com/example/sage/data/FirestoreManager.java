@@ -201,6 +201,34 @@ public class FirestoreManager {
                 })
                 .addOnFailureListener(onFailure);
     }
+    public void checkFavouriteByIdAndEmail(int plantId, String email, OnSuccessListener<Boolean> onSuccess, OnFailureListener onFailure) {
+        db.collection("users")
+                .whereEqualTo("email", email)
+                .limit(1)
+                .get()
+                .addOnSuccessListener(querySnapshot -> {
+                    if (!querySnapshot.isEmpty()) {
+                        DocumentSnapshot doc = querySnapshot.getDocuments().get(0);
+                        List<Long> rawFavourites = (List<Long>) doc.get("favourites");
+                        boolean isFavourite = false;
+
+                        if (rawFavourites != null) {
+                            for (Long id : rawFavourites) {
+                                if (id != null && id.intValue() == plantId) {
+                                    isFavourite = true;
+                                    break;
+                                }
+                            }
+                        }
+
+                        onSuccess.onSuccess(isFavourite);
+                    } else {
+                        onFailure.onFailure(new Exception("User with email " + email + " not found."));
+                    }
+                })
+                .addOnFailureListener(onFailure);
+    }
+
 
 
 }
