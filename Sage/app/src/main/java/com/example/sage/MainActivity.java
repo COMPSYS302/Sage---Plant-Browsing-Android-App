@@ -45,7 +45,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Search Bar
         AutoCompleteTextView searchAutoComplete = findViewById(R.id.searchAutoComplete);
-        SearchBarHelper.setupPlantSearchBar(this, searchAutoComplete, firestoreManager);
+
+        SearchBarHelper.setupLiveSearchBar(
+                this,
+                searchAutoComplete,
+                firestoreManager,
+                filteredPlants -> {
+                    // No RecyclerView to update in MainActivity
+                }
+        );
 
         // Set up bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);

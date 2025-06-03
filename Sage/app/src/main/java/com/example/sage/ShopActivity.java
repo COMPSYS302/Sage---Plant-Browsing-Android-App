@@ -2,7 +2,6 @@ package com.example.sage;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -57,8 +56,16 @@ public class ShopActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
 
         // Search Bar
-        AutoCompleteTextView searchAutoComplete = findViewById(R.id.searchBar);
-        SearchBarHelper.setupPlantSearchBar(this, searchAutoComplete, firestoreManager);
+        AutoCompleteTextView searchBar = findViewById(R.id.searchBar);
+        SearchBarHelper.setupLiveSearchBar(
+                this,
+                searchBar,
+                firestoreManager,
+                filteredPlants -> {
+                    // live update RecyclerView
+                    adapter.updateData(filteredPlants);
+                }
+        );
 
         // Initialize filter icon
         filterIcon = findViewById(R.id.filterIcon);
@@ -80,7 +87,6 @@ public class ShopActivity extends AppCompatActivity {
         selectedCategory = category; // Remember selection
         isFilterActive = !category.equalsIgnoreCase("All");
 
-
         FirestoreManager.retrieveAllPlants(
                 plants -> {
                     allPlants = plants; // Store full list
@@ -98,7 +104,6 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        FirestoreManager firestoreManager = new FirestoreManager();
                         adapter = new PlantAdapter(filtered, firestoreManager, R.layout.item_plant);
                         recyclerView.setAdapter(adapter);
                     } else {
@@ -228,8 +233,7 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        FirestoreManager firestoreManager = new FirestoreManager();
-                        adapter = new PlantAdapter(displayList,firestoreManager,R.layout.item_plant);
+                        adapter = new PlantAdapter(displayList, firestoreManager, R.layout.item_plant); // Removed redundant FirestoreManager instantiation
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateData(displayList);
