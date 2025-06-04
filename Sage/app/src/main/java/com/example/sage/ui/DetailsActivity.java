@@ -43,10 +43,6 @@ public class DetailsActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_details);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.green));
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.green));
-
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.details_root), (view, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);

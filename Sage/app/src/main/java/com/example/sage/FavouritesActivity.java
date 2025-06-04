@@ -35,9 +35,6 @@ public class FavouritesActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_favourites);
 
-        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.green));
-        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.green));
-
         // Setup RecyclerView to show plant cards in a 2-column grid
         recyclerView = findViewById(R.id.recyclerViewFavourites);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));

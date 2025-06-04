@@ -114,7 +114,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_sun"
-                    app:tint="@color/green"
+                    app:tint="@color/grey"
                     android:contentDescription="Sunlight icon"/>
 
                 <TextView
@@ -137,7 +137,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_calendar"
-                    app:tint="@color/green"
+                    app:tint="@color/grey"
                     android:contentDescription="Season icon"/>
 
                 <TextView
@@ -160,7 +160,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:src="@drawable/ic_water"
-                    app:tint="@color/green"
+                    app:tint="@color/grey"
                     android:contentDescription="Watering icon"/>
 
                 <TextView

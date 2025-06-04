@@ -1,7 +1,6 @@
 package com.example.sage;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,14 +43,13 @@ public class SearchBarHelper {
         firestoreManager.getAllPlants(allPlants -> {
             if (allPlants == null || allPlants.isEmpty()) return;
 
-            // Map plant names to Plant objects for quick lookup on item click
+            // Map plant names to Plant objects for quick lookup when dropdown item is clicked
             Map<String, Plant> plantMap = new HashMap<>();
             for (Plant plant : allPlants) {
                 plantMap.put(plant.getName(), plant);
             }
 
-            // Create a custom ArrayAdapter for the dropdown suggestions
-            // Override getFilter to disable internal filtering so "No results found" shows as an item
+            // Create a custom ArrayAdapter for dropdown suggestions
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                     activity,
                     android.R.layout.simple_dropdown_item_1line,
@@ -63,7 +61,6 @@ public class SearchBarHelper {
                         @Override
                         protected FilterResults performFiltering(CharSequence constraint) {
                             FilterResults results = new FilterResults();
-                            // Instead of filtering internally, just return the current adapter list as-is
                             results.values = getOriginalValues();
                             results.count = getOriginalValues().size();
                             return results;
@@ -73,13 +70,11 @@ public class SearchBarHelper {
                         protected void publishResults(CharSequence constraint, FilterResults results) {
                             clear();
                             if (results != null && results.values != null) {
-                                // Update adapter data with provided values (could include "No results found")
                                 addAll((List<String>) results.values);
                             }
                             notifyDataSetChanged();
                         }
 
-                        // Helper method to get current items in the adapter as a list
                         private List<String> getOriginalValues() {
                             List<String> list = new ArrayList<>();
                             for (int i = 0; i < getCount(); i++) {
@@ -91,58 +86,66 @@ public class SearchBarHelper {
                 }
             };
 
-            // Set the adapter and dropdown configurations on the search view
+            // Configure the search view
             searchView.setAdapter(adapter);
-            searchView.setThreshold(1); // Show suggestions after typing 1 character
+            searchView.setThreshold(1); // Start showing suggestions after 1 character
             searchView.setDropDownHeight(300); // Limit dropdown height
 
-            // Add a TextWatcher to perform live filtering on user input
+            // Add a TextWatcher to handle live search/filtering
             searchView.addTextChangedListener(new TextWatcher() {
                 @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
                 @Override public void afterTextChanged(Editable s) { }
-
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String query = s.toString().toLowerCase().trim(); // Normalize input for matching
+                    String query = s.toString().toLowerCase().trim();
 
-                    List<Plant> filteredPlants = new ArrayList<>(); // Filtered Plant objects
-                    List<String> topMatches = new ArrayList<>(); // Corresponding plant names (max 3)
+                    List<Plant> filteredPlants = new ArrayList<>();
+                    List<String> topMatches = new ArrayList<>();
+
+                    adapter.clear(); // Always clear suggestions
 
                     if (!query.isEmpty()) {
-                        // Search for plants whose names contain the query substring (case-insensitive)
+                        // Filter plants whose names match the query
                         for (Plant plant : allPlants) {
                             if (plant.getName().toLowerCase().contains(query)) {
                                 filteredPlants.add(plant);
                                 topMatches.add(plant.getName());
                             }
-                            if (topMatches.size() == 3) break; // Limit to top 3 matches
+                            if (topMatches.size() == 3) break; // Only show top 3
                         }
+
+                        if (!topMatches.isEmpty()) {
+                            adapter.addAll(topMatches);
+                        } else {
+                            adapter.add("No results found");
+                        }
+
+                        searchView.showDropDown();
+                    } else {
+                        // Query is empty: show all plants in the RecyclerView
+                        filteredPlants.addAll(allPlants);
+                        searchView.dismissDropDown();
                     }
 
-                    adapter.clear();
-                    if (!topMatches.isEmpty()) {
-                        // Add matching plant names to the dropdown suggestions
-                        adapter.addAll(topMatches);
-                        searchView.showDropDown();
-                        // Notify listener with filtered plant objects
-                        if (updateListener != null) updateListener.onResultsUpdated(filteredPlants);
-                    } else {
-                        // No matches found: show "No results found" as an item in the dropdown
-                        adapter.add("No results found");
-                        searchView.showDropDown();
-                        if (updateListener != null) updateListener.onResultsUpdated(new ArrayList<>());
+                    adapter.notifyDataSetChanged();
+
+                    // Update RecyclerView (even if query is empty)
+                    if (updateListener != null) {
+                        updateListener.onResultsUpdated(filteredPlants);
                     }
-                    adapter.notifyDataSetChanged(); // Refresh the dropdown
                 }
+
             });
 
-            // Handle what happens when user clicks on a dropdown suggestion
+            // Handle click on a dropdown suggestion
             searchView.setOnItemClickListener((parent, view, position, id) -> {
                 String selectedName = (String) parent.getItemAtPosition(position);
                 Plant selectedPlant = plantMap.get(selectedName);
+
+                // If clicked item is "No results found" or null, do nothing
                 if (selectedPlant == null) return;
 
-                // Prepare data for DetailsActivity
+                // Prepare and launch DetailsActivity with selected plant data
                 ArrayList<String> imageUrls = new ArrayList<>(selectedPlant.getImages());
                 Intent intent = new Intent(activity, DetailsActivity.class);
                 intent.putExtra("plant_id", selectedPlant.getPlantid());
