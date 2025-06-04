@@ -7,14 +7,12 @@
     android:layout_height="match_parent"
     android:background="@color/mint">
 
-    <!-- Scrollable content: image carousel and tabs -->
-
-    <!-- White rounded box pinned at bottom, fills width -->
+    <!-- Scrollable content above white container -->
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/details_container"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,17 +22,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center_horizontal"
-            android:paddingTop="24dp">
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
             <!-- Image Carousel -->
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/image_carousel"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="0dp"
+                android:minHeight="180dp"
+                android:maxHeight="300dp"
                 android:layout_marginBottom="8dp"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp" />
+                android:layout_weight="1"/>
 
             <!-- Centered Dots -->
             <LinearLayout
@@ -50,15 +49,16 @@
                     android:background="@color/transparent"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp"
-                    app:tabMode="fixed" />
+                    app:tabMode="fixed"/>
             </LinearLayout>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
+    <!-- White bottom sheet-style container -->
     <LinearLayout
         android:id="@+id/details_container"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/rounded_box_top"
         android:padding="25dp"
@@ -66,7 +66,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/nestedScrollView">
+        android:clipToPadding="false">
 
         <!-- Plant name and price -->
         <TextView
@@ -102,7 +102,7 @@
             android:layout_marginTop="16dp"
             android:gravity="center">
 
-            <!-- Light -->
+            <!-- Each icon column -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -121,11 +121,10 @@
                     android:id="@+id/plant_sunlight"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
 
-            <!-- Season -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -144,11 +143,10 @@
                     android:id="@+id/plant_season"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
 
-            <!-- Water -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -167,7 +165,7 @@
                     android:id="@+id/plant_water"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"
+                    android:textSize="16sp"
                     android:layout_marginTop="4dp"/>
             </LinearLayout>
         </LinearLayout>
@@ -179,7 +177,7 @@
             android:fontFamily="@font/quicksand_semibold"
             android:layout_height="wrap_content"
             android:text="About"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
@@ -187,7 +185,7 @@
             android:id="@+id/plant_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:textSize="16sp"
             android:layout_marginTop="8dp"/>
 
         <!-- “Add to Favourites” button -->
