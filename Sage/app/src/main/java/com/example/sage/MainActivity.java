@@ -22,6 +22,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -96,6 +97,9 @@ public class MainActivity extends AppCompatActivity {
         // Profile icon click opens popup menu
         ImageView profileIcon = findViewById(R.id.profileIcon);
         profileIcon.setOnClickListener(this::showProfileMenu);
+
+
+
     }
 
     @Override

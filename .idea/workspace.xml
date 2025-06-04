@@ -16,8 +16,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Gradle update fro 8.10.0 -&gt; 8.10.1 and a lot of stuff">
+    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Imported Necessary Libs, Images and classes add to app">
+      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -290,7 +292,8 @@
     <MESSAGE value="Search bar athstetics added to the app functionalities still being implemented." />
     <MESSAGE value="workspace.xml update" />
     <MESSAGE value="Gradle update fro 8.10.0 -&gt; 8.10.1 and a lot of stuff" />
-    <option name="LAST_COMMIT_MESSAGE" value="Gradle update fro 8.10.0 -&gt; 8.10.1 and a lot of stuff" />
+    <MESSAGE value="Imported Necessary Libs, Images and classes add to app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Imported Necessary Libs, Images and classes add to app" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
