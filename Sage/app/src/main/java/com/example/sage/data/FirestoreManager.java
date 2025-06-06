@@ -30,6 +30,12 @@ public class FirestoreManager {
     public FirestoreManager() {
         db = FirebaseFirestore.getInstance();
     }
+
+    /**
+     * \
+     * @param plant
+     * This method was used to upload plants to our firestore database
+     */
     public void uploadPlant(Plant plant) {
         db.collection(COLLECTION_NAME)
                 .document(String.valueOf(plant.getPlantid()))  // 用 plantId 作为文档 ID

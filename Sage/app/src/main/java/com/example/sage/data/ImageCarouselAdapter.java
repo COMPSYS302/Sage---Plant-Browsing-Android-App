@@ -31,7 +31,7 @@ public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdap
     }
 
     public void onBindViewHolder(@NonNull CarouselViewHolder holder, int position) {
-        // ✅ Load image from URL using Glide
+        // Load image from URL using Glide
         String url = imageUrls.get(position);
         Glide.with(holder.imageView.getContext())
                 .load(url)
