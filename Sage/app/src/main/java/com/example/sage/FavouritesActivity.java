@@ -88,7 +88,7 @@ public class FavouritesActivity extends AppCompatActivity {
                     totalValueText.setText("Total Value: $" + String.format("%.2f", total));
 
                     // Set the adapter with the list of favourite plants
-                    adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant);
+                    adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant,true);
                     recyclerView.setAdapter(adapter);
 
                 }, e -> Toast.makeText(this, "Failed to retrieve plants: " + e.getMessage(), Toast.LENGTH_SHORT).show()),

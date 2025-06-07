@@ -1,11 +1,14 @@
 package com.example.sage.data;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.sage.R;
 import com.example.sage.ui.DetailsActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +36,17 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     // Layout resource ID for inflating different layouts
     private final int layoutId;
 
+    private final boolean showDelete;
     private List<Integer> favouriteIds = new ArrayList<>(); // Optional, empty by default
 
 
     // Constructor initializes the adapter with the plant list, FirestoreManager, and layout ID
-    public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId) {
+    public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId,boolean showDelete) {
         this.plantList = new ArrayList<>(plantList);
         this.fullPlantList = new ArrayList<>(plantList); // Store a full copy for filtering
         this.firestoreManager = firestoreManager;
         this.layoutId = layoutId;
+        this.showDelete = showDelete;
     }
 
     // Replaces the existing data with a new filtered list
@@ -62,6 +69,12 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         plantList = filteredList;
         notifyDataSetChanged();
     }
+    // used to remove favouriate item from the page
+    public void removeItem(int position) {
+        plantList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, plantList.size());
+    }
 
     // Inflates the item layout and returns a new ViewHolder
     @NonNull
@@ -69,7 +82,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(layoutId, parent, false); // Use dynamic layout ID
-        return new PlantViewHolder(view, firestoreManager);
+        return new PlantViewHolder(view, firestoreManager,this,showDelete);
     }
 
     // Binds each plant in the list to the ViewHolder
@@ -92,22 +105,31 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         private final ImageView plantImage;
 
         private final TextView plantViews;
-        private final FirestoreManager firestoreManager;
 
-        public PlantViewHolder(@NonNull View itemView, FirestoreManager firestoreManager) {
+        private final ImageButton deleteButton;
+        private final FirestoreManager firestoreManager;
+        private final PlantAdapter adapter;
+
+        private final Boolean showDelete;
+
+        public PlantViewHolder(@NonNull View itemView, FirestoreManager firestoreManager, PlantAdapter adapter,boolean showDelete) {
             super(itemView);
             this.firestoreManager = firestoreManager;
-
+            this.adapter = adapter;
+            this.showDelete = showDelete;
             // View binding
             plantName = itemView.findViewById(R.id.plantName);
             plantCategory = itemView.findViewById(R.id.plantCategory);
             plantPrice = itemView.findViewById(R.id.plantPrice);
             plantImage = itemView.findViewById(R.id.plant_image);
             plantViews = itemView.findViewById(R.id.plantViews);
+            deleteButton = itemView.findViewById(R.id.delete_button);
         }
 
         // Populates the plant item with data
         public void bindView(Plant plant) {
+            Log.d("DELETE_BUTTON", "showDelete: " + showDelete);
+
             plantName.setText(plant.getName());
             plantCategory.setText(plant.getCategory());
             plantPrice.setText("$" + String.format("%.2f", plant.getPrice()));
@@ -124,6 +146,36 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             } else {
                 plantImage.setImageResource(R.drawable.placeholder);
             }
+
+            if (deleteButton != null) {
+                Log.d("DELETE_BUTTON", "setting visibility, showDelete = " + showDelete);
+                deleteButton.setVisibility(showDelete ? View.VISIBLE : View.GONE);
+                if (showDelete) {
+                    // Click to delete
+                    deleteButton.setOnClickListener(v -> {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION) {
+                            // no need for currentUser check or email validity check, as user should already login
+                            FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+                            String email = currentUser.getEmail();
+                            firestoreManager.deleteFavourite(
+                                    plant.getPlantid(),
+                                    email,
+                                    unused -> {
+                                        Toast.makeText(itemView.getContext(), "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+
+                                    },
+                                    error -> {
+                                        Toast.makeText(itemView.getContext(), "Failed to remove favourite: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                                    });
+                            adapter.removeItem(pos); // Remove from list
+                        }
+                    });
+                }
+            }
+
+
 
             // Handles click on a plant card
             itemView.setOnClickListener(v -> {
