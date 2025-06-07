@@ -20,6 +20,11 @@
           <theme>@style/Base.Theme.Sage</theme>
         </config>
       </layout>
+      <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/menu/bottom_nav.xml">
+        <config>
+          <theme>@style/Base.Theme.Sage</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml">
         <config>
           <theme>@style/Base.Theme.Sage</theme>
@@ -31,9 +36,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Imported Necessary Libs, Images and classes add to app">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/LoginActivity.java" afterDir="false" />
+    <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="changed from src to icon">
       <change beforePath="$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -286,7 +289,23 @@
       <option name="project" value="LOCAL" />
       <updated>1748817553677</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Icons add to profile_menu.xml file, but it doesn't show up in the app">
+      <option name="closed" value="true" />
+      <created>1749263835424</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1749263835424</updated>
+    </task>
+    <task id="LOCAL-00013" summary="changed from src to icon">
+      <option name="closed" value="true" />
+      <created>1749264016715</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1749264016715</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -308,7 +327,9 @@
     <MESSAGE value="workspace.xml update" />
     <MESSAGE value="Gradle update fro 8.10.0 -&gt; 8.10.1 and a lot of stuff" />
     <MESSAGE value="Imported Necessary Libs, Images and classes add to app" />
-    <option name="LAST_COMMIT_MESSAGE" value="Imported Necessary Libs, Images and classes add to app" />
+    <MESSAGE value="Icons add to profile_menu.xml file, but it doesn't show up in the app" />
+    <MESSAGE value="changed from src to icon" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed from src to icon" />
   </component>
   <component name="play_dynamic_filters_status">
     <option name="appIdToCheckInfo">
