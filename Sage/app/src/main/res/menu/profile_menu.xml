@@ -9,11 +9,11 @@
         android:title="Sign Up" />
     <item
         android:id="@+id/menu_delete_account"
-        android:title="Delete Account"
-        android:src="@drawable/ic_trash"/>
+        android:icon="@drawable/ic_trash"
+        android:title="Delete Account"/>
     <item
         android:id="@+id/menu_logout"
-        android:title="Logout"
-        android:src="@drawable/ic_logout"/>
+        android:icon="@drawable/ic_logout"
+        android:title="Logout"/>
 
 </menu>
