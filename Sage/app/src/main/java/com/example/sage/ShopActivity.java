@@ -104,7 +104,7 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        adapter = new PlantAdapter(filtered, firestoreManager, R.layout.item_plant,false);
+                        adapter = new PlantAdapter(filtered, firestoreManager, R.layout.item_plant,false,null);
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateData(filtered);
@@ -233,7 +233,7 @@ public class ShopActivity extends AppCompatActivity {
                     }
 
                     if (adapter == null) {
-                        adapter = new PlantAdapter(displayList, firestoreManager, R.layout.item_plant,false); // Removed redundant FirestoreManager instantiation
+                        adapter = new PlantAdapter(displayList, firestoreManager, R.layout.item_plant,false,null); // Removed redundant FirestoreManager instantiation
                         recyclerView.setAdapter(adapter);
                     } else {
                         adapter.updateData(displayList);

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.example.sage.FavouritesActivity;
 import com.example.sage.R;
 import com.example.sage.ui.DetailsActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,16 +38,24 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
     private final int layoutId;
 
     private final boolean showDelete;
+    private final OnItemRemovedListener removeListener;
     private List<Integer> favouriteIds = new ArrayList<>(); // Optional, empty by default
 
 
     // Constructor initializes the adapter with the plant list, FirestoreManager, and layout ID
-    public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId,boolean showDelete) {
+    public PlantAdapter(List<Plant> plantList, FirestoreManager firestoreManager, int layoutId,boolean showDelete,OnItemRemovedListener removeListener) {
         this.plantList = new ArrayList<>(plantList);
         this.fullPlantList = new ArrayList<>(plantList); // Store a full copy for filtering
         this.firestoreManager = firestoreManager;
         this.layoutId = layoutId;
         this.showDelete = showDelete;
+        this.removeListener = removeListener;
+    }
+    public interface OnItemRemovedListener {
+        void onItemRemoved(double price);
+    }
+    public List<Plant> getCurrentData() {
+        return new ArrayList<>(plantList);
     }
 
     /** Replaces the existing data with a new filtered list
@@ -190,6 +199,9 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                                     email,
                                     unused -> {
                                         Toast.makeText(itemView.getContext(), "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                                        if (adapter.removeListener != null) {
+                                            adapter.removeListener.onItemRemoved(plant.getPrice());
+                                        }
 
                                     },
                                     error -> {
