@@ -5,7 +5,22 @@
       <config />
     </shared>
     <layouts>
+      <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/drawable/bottom_background.xml">
+        <config>
+          <theme>@style/Base.Theme.Sage</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/drawable/dot_active.xml">
+        <config>
+          <theme>@style/Base.Theme.Sage</theme>
+        </config>
+      </layout>
       <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/layout/activity_main.xml">
+        <config>
+          <theme>@style/Base.Theme.Sage</theme>
+        </config>
+      </layout>
+      <layout url="file://$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml">
         <config>
           <theme>@style/Base.Theme.Sage</theme>
         </config>
@@ -17,9 +32,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="95d752c3-0703-4f34-99b9-403b954c2aa3" name="Changes" comment="Imported Necessary Libs, Images and classes add to app">
-      <change beforePath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/deviceStreaming.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/LoginActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/java/com/example/sage/LoginActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Sage/app/src/main/res/menu/profile_menu.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -300,12 +315,12 @@
       <map>
         <entry key="com.example.sage">
           <value>
-            <CheckInfo lastCheckTimestamp="1748764385678" />
+            <CheckInfo lastCheckTimestamp="1749259237240" />
           </value>
         </entry>
         <entry key="com.example.sage.test">
           <value>
-            <CheckInfo lastCheckTimestamp="1748764385677" />
+            <CheckInfo lastCheckTimestamp="1749259237241" />
           </value>
         </entry>
       </map>
