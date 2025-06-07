@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
                 Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
 
                 List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));
-                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card,false);
+                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card,false,null);
                 topPicksRecyclerView.setAdapter(topPicksAdapter);
             } else {
                 Toast.makeText(this, "No plants found", Toast.LENGTH_SHORT).show();
