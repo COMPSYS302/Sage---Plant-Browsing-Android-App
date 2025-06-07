@@ -55,6 +55,9 @@ public class LoadingActivity extends Activity {
 
     private void proceedToMain() {
         startActivity(new Intent(this, MainActivity.class));
+        // Apply fade in for main activity, fade out for this activity
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
         finish();
     }
+
 }

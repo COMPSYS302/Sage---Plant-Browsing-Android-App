@@ -75,8 +75,6 @@ public class FavouritesActivity extends AppCompatActivity {
         firestoreManager.getFavouriteIdsByEmail(email,
                 favouriteIds -> FirestoreManager.retrieveAllPlants(allPlants -> {
                     List<Plant> favourites = new ArrayList<>();
-                    //double total = 0.0;
-
                     // Filter plants that match the user's favourite IDs
                     for (Plant plant : allPlants) {
                         if (favouriteIds.contains(plant.getPlantid())) {
@@ -84,28 +82,30 @@ public class FavouritesActivity extends AppCompatActivity {
                         }
                     }
 
-                    // Display the total value of favourites
-                    updateTotalValue();
-
                     // Set the adapter with the list of favourite plants
-                    adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant,true,price -> {
-                        recalculateTotalValue();
+                    adapter = new PlantAdapter(favourites, firestoreManager, R.layout.item_plant, true, price -> {
+                        updateTotalValue(); // Update total when price changes
                     });
-                    recalculateTotalValue();
+
                     recyclerView.setAdapter(adapter);
+
+                    updateTotalValue(); // Initial total value calculation and display
 
                 }, e -> Toast.makeText(this, "Failed to retrieve plants: " + e.getMessage(), Toast.LENGTH_SHORT).show()),
                 e -> Toast.makeText(this, "Failed to retrieve favourites: " + e.getMessage(), Toast.LENGTH_SHORT).show());
     }
-    private void recalculateTotalValue() {
+
+    /**
+     * Calculates and updates the total value of the favourite plants.
+     */
+    private void updateTotalValue() {
         double sum = 0.0;
-        for (Plant plant : adapter.getCurrentData()) {
-            sum += plant.getPrice();
+        if (adapter != null) {
+            for (Plant plant : adapter.getCurrentData()) {
+                sum += plant.getPrice();
+            }
         }
         total = sum;
-        updateTotalValue();
-    }
-    private void updateTotalValue() {
         totalValueText.setText("Total Value: $" + String.format("%.2f", total));
     }
 

@@ -160,7 +160,10 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
             deleteButton = itemView.findViewById(R.id.delete_button);
         }
 
-        // Populates the plant item with data
+        /**
+         * Binds the plant data to the view
+         * @param plant
+         */
         public void bindView(Plant plant) {
             Log.d("DELETE_BUTTON", "showDelete: " + showDelete);
 
@@ -193,26 +196,40 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                             // user should already be logged in
                             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                             String email = currentUser.getEmail();
-                            // Remove from favourites
-                            firestoreManager.deleteFavourite(
-                                    plant.getPlantid(),
-                                    email,
-                                    unused -> {
-                                        Toast.makeText(itemView.getContext(), "Removed from Favourites!", Toast.LENGTH_SHORT).show();
-                                        if (adapter.removeListener != null) {
-                                            adapter.removeListener.onItemRemoved(plant.getPrice());
-                                        }
-
-                                    },
-                                    error -> {
-                                        Toast.makeText(itemView.getContext(), "Failed to remove favourite: " + error.getMessage(), Toast.LENGTH_SHORT).show();
-
-                                    });
-                            adapter.removeItem(pos); // Remove from list
+                            // Shake animation on the card before delete
+                            itemView.animate()
+                                    .translationXBy(25f) // Move right
+                                    .setDuration(50)
+                                    .withEndAction(() -> itemView.animate()
+                                            .translationXBy(-50f) // Move left
+                                            .setDuration(100)
+                                            .withEndAction(() -> itemView.animate()
+                                                    .translationXBy(25f) // Move back to center
+                                                    .setDuration(50)
+                                                    .withEndAction(() -> {
+                                                        // Remove from favourites
+                                                        firestoreManager.deleteFavourite(
+                                                                plant.getPlantid(),
+                                                                email,
+                                                                unused -> {
+                                                                    Toast.makeText(itemView.getContext(), "Removed from Favourites!", Toast.LENGTH_SHORT).show();
+                                                                    if (adapter.removeListener != null) {
+                                                                        adapter.removeListener.onItemRemoved(plant.getPrice());
+                                                                    }
+                                                                },
+                                                                error -> {
+                                                                    Toast.makeText(itemView.getContext(), "Failed to remove favourite: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                                                });
+                                                        adapter.removeItem(pos); // Remove from list
+                                                    })
+                                                    .start())
+                                            .start())
+                                    .start();
                         }
                     });
                 }
             }
+
 
 
 

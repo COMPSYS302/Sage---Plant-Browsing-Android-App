@@ -22,7 +22,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -110,6 +109,9 @@ public class MainActivity extends AppCompatActivity {
         loadTopPicks();
     }
 
+    /**
+     * Loads and displays top 3 most viewed plants
+     */
     private void loadTopPicks() {
         firestoreManager.getAllPlants(plants -> {
             if (plants != null && !plants.isEmpty()) {
@@ -117,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 Collections.shuffle(plants);
                 // Sort by views descending
                 Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
-
-                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));
+                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));// Get top 3 plants by views
                 PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card,false,null);
                 topPicksRecyclerView.setAdapter(topPicksAdapter);
             } else {
@@ -127,6 +128,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Opens ShopActivity with a filter
+     * @param category The category to filter by
+     */
+
     private void openShopWithFilter(String category) {
         Intent intent = new Intent(this, ShopActivity.class);
         intent.putExtra("categoryFilter", category);
@@ -134,7 +140,10 @@ public class MainActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
-    // Show profile menu with options depending on login state
+    /**
+     * Show profile menu with options depending on login state
+     * @param anchor The view to anchor the popup menu
+     */
     private void showProfileMenu(View anchor) {
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
@@ -194,23 +203,25 @@ public class MainActivity extends AppCompatActivity {
         popup.show();
     }
 
-    // Show confirmation dialog before deleting user account
+    /**
+     * Show confirmation dialog before deleting user account, then delete if confirmed
+     * This method was written by Chatgpt
+     */
     private void confirmDeleteAccount() {
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser(); // Get current user
         if (user == null) {
             Toast.makeText(this, "Not signed in", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // The following method was written by Chatgpt
         new AlertDialog.Builder(this)
                 .setTitle("Delete Account")
                 .setMessage("Are you sure you want to delete your account? This cannot be undone.")
                 .setPositiveButton("Delete", (dialog, which) -> {
-                    user.delete().addOnCompleteListener(task -> {
+                    user.delete().addOnCompleteListener(task -> { // Delete user account
                         if (task.isSuccessful()) {
                             Toast.makeText(this, "Account deleted", Toast.LENGTH_SHORT).show();
-                            FirebaseAuth.getInstance().signOut();
+                            FirebaseAuth.getInstance().signOut(); // Sign out user
 
                             // Restart MainActivity fresh
                             Intent intent = new Intent(this, MainActivity.class);

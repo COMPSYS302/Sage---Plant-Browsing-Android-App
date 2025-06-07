@@ -91,7 +91,8 @@ android:padding="12dp">
         android:visibility="gone"
         android:elevation="8dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint = "@color/white"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

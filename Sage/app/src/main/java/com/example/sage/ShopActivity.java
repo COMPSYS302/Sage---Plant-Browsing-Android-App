@@ -29,7 +29,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ShopActivity extends AppCompatActivity {
@@ -132,25 +134,50 @@ public class ShopActivity extends AppCompatActivity {
         });
     }
 
+
     /**
-     * Displays the filter popup under the filter icon with green highlight on the selected item.
+     * Displays the filter popup under the filter icon with green highlight on the selected item
+     * @param anchorView The view to anchor the popup to
      */
     private void showFilterPopup(View anchorView) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         View popupView = inflater.inflate(R.layout.filter_popup, null);
 
         ListView categoryListView = popupView.findViewById(R.id.categoryFilterList);
-        String[] categories = {"All", "Indoor", "Flowering", "Edible"};
+        // raw categories used for filtering, kept separate from display strings with counts
+        String[] rawCategories = {"All", "Indoor", "Flowering", "Edible"};
+
+        // Calculate counts for each category including "All"
+        Map<String, Integer> counts = new HashMap<>();
+        counts.put("All", allPlants.size()); // Total count
+        for (String cat : rawCategories) {
+            if (!cat.equals("All")) {
+                int cnt = 0;
+                for (Plant p : allPlants) {
+                    if (p.getCategory().equalsIgnoreCase(cat)) {
+                        cnt++;
+                    }
+                }
+                counts.put(cat, cnt);
+            }
+        }
+
+        // Build display strings with counts appended, e.g. "Indoor (12)"
+        String[] displayItems = new String[rawCategories.length];
+        for (int i = 0; i < rawCategories.length; i++) {
+            String key = rawCategories[i];
+            displayItems[i] = key + " (" + counts.getOrDefault(key, 0) + ")";
+        }
 
         // Adapter that highlights the selected category
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, categories) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, displayItems) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 View view = super.getView(position, convertView, parent);
                 TextView textView = (TextView) view;
 
                 // Highlight selected category in green
-                if (categories[position].equalsIgnoreCase(selectedCategory)) {
+                if (rawCategories[position].equalsIgnoreCase(selectedCategory)) {
                     textView.setTextColor(ContextCompat.getColor(getContext(), R.color.green));
                 } else {
                     textView.setTextColor(Color.BLACK);
@@ -174,7 +201,8 @@ public class ShopActivity extends AppCompatActivity {
 
         // Handle category selection
         categoryListView.setOnItemClickListener((parent, view, position, id) -> {
-            selectedCategory = categories[position]; // Track selection
+            // Use raw category key here to apply filter correctly
+            selectedCategory = rawCategories[position]; // Track selection
             applyFilter(selectedCategory);
             popupWindow.dismiss();
         });
