@@ -49,16 +49,22 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         this.showDelete = showDelete;
     }
 
-    // Replaces the existing data with a new filtered list
+    /** Replaces the existing data with a new filtered list
+     *
+     * @param newPlantList The new list of plants to display
+     */
     public void updateData(List<Plant> newPlantList) {
         this.plantList = new ArrayList<>(newPlantList);
         notifyDataSetChanged(); // Notify the RecyclerView to refresh
     }
 
-    // Filters the list based on a search query
+    /** Filters the list based on a search query
+     *
+     * @param query The search query
+     */
     public void setFilteredList(String query) {
         List<Plant> filteredList = new ArrayList<>();
-
+        // Loop through the full list and add matching plants to the filtered list
         for (Plant plant : fullPlantList) {
             if (plant.getName().toLowerCase().contains(query.toLowerCase()) ||
                     plant.getCategory().toLowerCase().contains(query.toLowerCase())) {
@@ -69,14 +75,24 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         plantList = filteredList;
         notifyDataSetChanged();
     }
-    // used to remove favouriate item from the page
+
+    /**
+     * Removes an item from the list and notifies the adapter
+     * @param position The position of the item to remove
+     */
     public void removeItem(int position) {
         plantList.remove(position);
         notifyItemRemoved(position);
         notifyItemRangeChanged(position, plantList.size());
     }
 
-    // Inflates the item layout and returns a new ViewHolder
+    /** Inflates the item layout and returns a new ViewHolder
+     *
+     * @param parent   The ViewGroup into which the new View will be added after it is bound to
+     *                 an adapter position.
+     * @param viewType The view type of the new View.
+     * @return A new ViewHolder that holds a View of the given view type.
+     */
     @NonNull
     @Override
     public PlantViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -85,13 +101,21 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
         return new PlantViewHolder(view, firestoreManager,this,showDelete);
     }
 
-    // Binds each plant in the list to the ViewHolder
+    /** Binds each plant in the list to the ViewHolder
+     *
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull PlantViewHolder holder, int position) {
         holder.bindView(plantList.get(position));
     }
 
-    // Returns the number of items in the plant list
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     * @return The total number of items in this adapter.
+     */
     @Override
     public int getItemCount() {
         return plantList.size();
@@ -112,6 +136,7 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
 
         private final Boolean showDelete;
 
+        // Constructor initialises the ViewHolder with the view and FirestoreManager
         public PlantViewHolder(@NonNull View itemView, FirestoreManager firestoreManager, PlantAdapter adapter,boolean showDelete) {
             super(itemView);
             this.firestoreManager = firestoreManager;
@@ -144,20 +169,22 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                         .error(R.drawable.image_failed)      // Show if loading fails
                         .into(plantImage);
             } else {
-                plantImage.setImageResource(R.drawable.placeholder);
+                plantImage.setImageResource(R.drawable.placeholder);// Placeholder error image
             }
 
+            // Set the visibility of the delete button
             if (deleteButton != null) {
                 Log.d("DELETE_BUTTON", "setting visibility, showDelete = " + showDelete);
                 deleteButton.setVisibility(showDelete ? View.VISIBLE : View.GONE);
                 if (showDelete) {
                     // Click to delete
                     deleteButton.setOnClickListener(v -> {
-                        int pos = getAdapterPosition();
+                        int pos = getBindingAdapterPosition(); // Get the position of the item
                         if (pos != RecyclerView.NO_POSITION) {
-                            // no need for currentUser check or email validity check, as user should already login
+                            // user should already be logged in
                             FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
                             String email = currentUser.getEmail();
+                            // Remove from favourites
                             firestoreManager.deleteFavourite(
                                     plant.getPlantid(),
                                     email,
@@ -182,10 +209,9 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                 // Increment the view count in Firestore
                 firestoreManager.incrementPlantViews(plant.getPlantid());
 
-                // Start DetailsActivity with plant data
+                // Launch DetailsActivity with plant data
                 Intent intent = new Intent(v.getContext(), DetailsActivity.class);
                 intent.putExtra("plant_id", plant.getPlantid());
-
                 intent.putExtra("plant_name", plant.getName());
                 intent.putExtra("plant_description",plant.getDescription());
                 intent.putExtra("plant_category", plant.getCategory());
@@ -193,7 +219,6 @@ public class PlantAdapter extends RecyclerView.Adapter<PlantAdapter.PlantViewHol
                 intent.putExtra("plant_sunlight", plant.getSunlight());
                 intent.putExtra("plant_water", plant.getWater());
                 intent.putExtra("plant_season", plant.getSeason());
-                // intent.putExtra("plant_image", plant.getImageResource()); // not implemented yet
                 if (plant.getImages() != null && !plant.getImages().isEmpty()) {
                     intent.putStringArrayListExtra("plant_images", new ArrayList<>(plant.getImages()));
                 }

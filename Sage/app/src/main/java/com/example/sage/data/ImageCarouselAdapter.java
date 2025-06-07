@@ -15,13 +15,17 @@ import java.util.List;
 
 public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdapter.CarouselViewHolder> {
 
-    private final List<String> imageUrls;
+    private final List<String> imageUrls; // List of image URLs
 
     public ImageCarouselAdapter(List<String> imageUrls) {
         this.imageUrls = imageUrls;
     }
 
 
+    /**
+        This method is called when the ViewHolder needs to be created.
+        It inflates the layout for each item and returns a new ViewHolder.
+     */
     @NonNull
     @Override
     public CarouselViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -30,6 +34,12 @@ public class ImageCarouselAdapter extends RecyclerView.Adapter<ImageCarouselAdap
         return new CarouselViewHolder(view);
     }
 
+    /**
+     * This method is called by the RecyclerView to display the data at the specified position.
+     * @param holder   The ViewHolder which should be updated to represent the contents of the
+     *                 item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     public void onBindViewHolder(@NonNull CarouselViewHolder holder, int position) {
         // Load image from URL using Glide
         String url = imageUrls.get(position);

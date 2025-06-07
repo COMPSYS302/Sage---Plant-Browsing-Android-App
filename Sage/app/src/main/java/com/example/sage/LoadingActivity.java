@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import com.example.sage.data.FirestoreManager;
@@ -23,6 +24,10 @@ public class LoadingActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
+
+        // Disabled dark mode as this isn't implemented and also set status bar colour to green to match loading screen
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.green));
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
 
         firestoreManager = new FirestoreManager();

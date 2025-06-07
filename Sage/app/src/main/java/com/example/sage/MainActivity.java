@@ -100,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
     }
 
     @Override
@@ -137,6 +138,24 @@ public class MainActivity extends AppCompatActivity {
     private void showProfileMenu(View anchor) {
         PopupMenu popup = new PopupMenu(this, anchor);
         popup.getMenuInflater().inflate(R.menu.profile_menu, popup.getMenu());
+
+        // Show icons in the popup menu
+        try {
+            java.lang.reflect.Field[] fields = popup.getClass().getDeclaredFields();
+            for (java.lang.reflect.Field field : fields) {
+                if ("mPopup".equals(field.getName())) {
+                    field.setAccessible(true);
+                    Object menuPopupHelper = field.get(popup);
+                    Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                    java.lang.reflect.Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                    setForceIcons.invoke(menuPopupHelper, true);
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Log.e("MainActivity", "Error showing menu icons to show", e);
+        }
+
 
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         boolean isLoggedIn = user != null;

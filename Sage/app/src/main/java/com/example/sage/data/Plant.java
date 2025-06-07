@@ -3,6 +3,8 @@ package com.example.sage.data;
 import java.util.List;
 
 public class Plant {
+
+    // Fields
     private int plantid;
     private String name;
     private String category;
