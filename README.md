@@ -20,7 +20,7 @@
   Key details on each plant including care tips, price, description, and a carousel of images.
 
 - **User Authentication**  
-  Sign up /log in, and manage account settings via Firebase Authentication.
+  Sign up /log in functionalities, via Firebase Authentication.
 
 
 ## Little Touches
@@ -51,3 +51,6 @@
 - **Authentication:** Firebase Auth
 - **Image Loading:** Glide
 - **Build Tool:** Gradle
+
+## Screenshots
+https://drive.google.com/drive/folders/1GfZI_RGFzTDaIqKmIPS6VR6exugz5rOe?usp=drive_link
