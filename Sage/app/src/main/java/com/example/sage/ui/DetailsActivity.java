@@ -2,6 +2,8 @@ package com.example.sage.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +36,10 @@ public class DetailsActivity extends AppCompatActivity {
     private Button favButton;
     private boolean isCurrentlyFavourite = false; //  Boolean to track if the plant is a favourite
 
+    private Animation scaleUp; // Animation for scaling up
+    private Animation scaleDown; // Animation for scaling down
+
+
     private ActivityResultLauncher<Intent> loginLauncher;
 
     @Override
@@ -47,6 +53,9 @@ public class DetailsActivity extends AppCompatActivity {
             view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up);
+        scaleDown = AnimationUtils.loadAnimation(this, R.anim.scale_down);
 
         // Register ActivityResultLauncher
         loginLauncher = registerForActivityResult(
@@ -136,21 +145,21 @@ public class DetailsActivity extends AppCompatActivity {
      * Animates the favourite button text change with a zoom animation
      */
     private void updateFavButtonText() {
-        favButton.animate()
-                // Start with a smaller size
-                .scaleX(0.8f)
-                .scaleY(0.8f)
-                .setDuration(100) // 100ms animation duration
-                .withEndAction(() -> {
-                    favButton.setText(isCurrentlyFavourite ? "Remove from Favourites" : "Add to Favourites"); // Set the text, if the plant is a favourite, remove from favourites, otherwise add to favourites
-                    favButton.animate()
-                            .scaleX(1f) // Return to normal size
-                            .scaleY(1f)
-                            .setDuration(100) // 100ms animation duration
-                            .start();
-                })
-                .start();
+        // Set correct text immediately
+        favButton.setText(isCurrentlyFavourite ? "Remove from Favourites" : "Add to Favourites");// Set the button text, Add if not favourite, Remove if favourite
+
+        // zoom animation, scale up then scale down
+        favButton.startAnimation(scaleUp);
+        scaleUp.setAnimationListener(new Animation.AnimationListener() {
+            @Override public void onAnimationStart(Animation animation) {}
+            @Override public void onAnimationEnd(Animation animation) {
+                favButton.startAnimation(scaleDown);
+            }
+            @Override public void onAnimationRepeat(Animation animation) {}
+        });
     }
+
+
 
     /**
      * Adds the plant to the user's favourites
