@@ -9,9 +9,13 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
 import com.example.sage.ui.DetailsActivity;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,139 +37,158 @@ public class SearchBarHelper {
      * @param firestoreManager Manager to fetch plant data from Firestore.
      * @param updateListener Listener to notify filtered results updates (can be null).
      */
-    public static void setupLiveSearchBar(
+    public static void setupSearchBar(
             Activity activity,
             AutoCompleteTextView searchView,
             FirestoreManager firestoreManager,
             SearchUpdateListener updateListener
     ) {
-        // Fetch all plants from Firestore
-        firestoreManager.getAllPlants(allPlants -> {
-            if (allPlants == null || allPlants.isEmpty()) return;
+        // Fetch all plants from Firestore using retrieveAllPlants with listeners
+        firestoreManager.retrieveAllPlants(
+                new OnSuccessListener<List<Plant>>() {
+                    @Override
+                    public void onSuccess(List<Plant> allPlants) {
+                        if (allPlants == null || allPlants.isEmpty()) return;
 
-            // Map plant names to Plant objects for quick lookup when dropdown item is clicked
-            Map<String, Plant> plantMap = new HashMap<>();
-            for (Plant plant : allPlants) {
-                plantMap.put(plant.getName(), plant);
-            }
-
-            // Create a custom ArrayAdapter for dropdown suggestions
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                    activity,
-                    android.R.layout.simple_dropdown_item_1line,
-                    new ArrayList<>()
-            ) {
-                @Override
-                public android.widget.Filter getFilter() {
-                    return new android.widget.Filter() {
-                        @Override
-                        protected FilterResults performFiltering(CharSequence constraint) {
-                            FilterResults results = new FilterResults();
-                            results.values = getOriginalValues();
-                            results.count = getOriginalValues().size();
-                            return results;
-                        }
-
-                        @Override
-                        protected void publishResults(CharSequence constraint, FilterResults results) {
-                            clear();
-                            if (results != null && results.values != null) {
-                                addAll((List<String>) results.values);
-                            }
-                            notifyDataSetChanged();
-                        }
-
-                        private List<String> getOriginalValues() {
-                            List<String> list = new ArrayList<>();
-                            for (int i = 0; i < getCount(); i++) {
-                                list.add(getItem(i));
-                            }
-                            return list;
-                        }
-                    };
-                }
-            };
-
-            // Configure the search view
-            searchView.setAdapter(adapter);
-            searchView.setThreshold(1); // Start showing suggestions after 1 character
-            searchView.setDropDownHeight(300); // Limit dropdown height
-
-            // Add a TextWatcher to handle live search/filtering
-            searchView.addTextChangedListener(new TextWatcher() {
-                @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-                @Override public void afterTextChanged(Editable s) { }
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    String query = s.toString().toLowerCase().trim();
-
-                    List<Plant> filteredPlants = new ArrayList<>();
-                    List<String> topMatches = new ArrayList<>();
-
-                    adapter.clear(); // Always clear suggestions
-
-                    if (!query.isEmpty()) {
-                        // Filter plants whose names match the query
+                        // Map plant names to Plant objects for quick lookup when dropdown item is clicked
+                        Map<String, Plant> plantMap = new HashMap<>();
                         for (Plant plant : allPlants) {
-                            if (plant.getName().toLowerCase().contains(query)) {
-                                filteredPlants.add(plant);
-                                topMatches.add(plant.getName());
+                            plantMap.put(plant.getName(), plant);
+                        }
+
+                        // Create a custom ArrayAdapter for dropdown suggestions
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                activity,
+                                android.R.layout.simple_dropdown_item_1line,
+                                new ArrayList<>()
+                        ) {
+                            /**
+                             * Get the filter for the dropdown suggestions.
+                             */
+                            @Override
+                            public android.widget.Filter getFilter() {
+                                return new android.widget.Filter() {
+                                    /**
+                                     * Perform the filtering of data.
+                                     * @param constraint the constraint used to filter the data
+                                     */
+                                    @Override
+                                    protected FilterResults performFiltering(CharSequence constraint) {
+                                        FilterResults results = new FilterResults(); // Create a FilterResults object
+                                        results.values = getOriginalValues(); // Set the values to the original values
+                                        results.count = getOriginalValues().size(); // Set the count to the size of the original values
+                                        return results;
+                                    }
+
+                                    @Override
+                                    protected void publishResults(CharSequence constraint, FilterResults results) {
+                                        clear();
+                                        if (results != null && results.values != null) { // Check if results are not null
+                                            addAll((List<String>) results.values); // Add the filtered values to the adapter
+                                        }
+                                        notifyDataSetChanged(); // Notify the adapter that the data has changed, so that the recycler view can update
+                                    }
+
+                                    private List<String> getOriginalValues() { // Get the original values from the adapter
+                                        List<String> list = new ArrayList<>();
+                                        for (int i = 0; i < getCount(); i++) { // Loop through the adapter
+                                            list.add(getItem(i)); // Add each item to the list
+                                        }
+                                        return list; // Return the list of original values
+                                    }
+                                };
                             }
-                            if (topMatches.size() == 3) break; // Only show top 3
-                        }
+                        };
 
-                        if (!topMatches.isEmpty()) {
-                            adapter.addAll(topMatches);
-                        } else {
-                            adapter.add("No results found");
-                        }
+                        // Configure the search view
+                        searchView.setAdapter(adapter);
+                        searchView.setThreshold(1); // Start showing suggestions after 1 character
+                        searchView.setDropDownHeight(300); // Limit dropdown height
 
-                        searchView.showDropDown();
-                    } else {
-                        // Query is empty: show all plants in the RecyclerView
-                        filteredPlants.addAll(allPlants);
-                        searchView.dismissDropDown();
+                        // Add a TextWatcher to handle live search/filtering
+                        searchView.addTextChangedListener(new TextWatcher() {
+                            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+                            @Override public void afterTextChanged(Editable s) { }
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                String query = s.toString().toLowerCase().trim();
+
+                                List<Plant> filteredPlants = new ArrayList<>();
+                                List<String> topMatches = new ArrayList<>();
+
+                                adapter.clear(); // Always clear suggestions
+
+                                if (!query.isEmpty()) {
+                                    // Filter plants with names that match the query
+                                    for (Plant plant : allPlants) {
+                                        if (plant.getName().toLowerCase().contains(query)) {
+                                            filteredPlants.add(plant);
+                                            topMatches.add(plant.getName());
+                                        }
+                                        if (topMatches.size() == 3) break; // Only show top 3
+                                    }
+
+                                    if (!topMatches.isEmpty()) {
+                                        adapter.addAll(topMatches);
+                                    } else {
+                                        adapter.add("No results found");
+                                    }
+
+                                    searchView.showDropDown();
+                                } else {
+                                    // If search bar is cleared or empty, show all plants in the RecyclerView
+                                    filteredPlants.addAll(allPlants);
+                                    searchView.dismissDropDown();
+                                }
+
+                                adapter.notifyDataSetChanged();
+
+                                // Update RecyclerView
+                                if (updateListener != null) {
+                                    updateListener.onResultsUpdated(filteredPlants);
+                                }
+                            }
+
+                        });
+
+                        // Handle click on a dropdown suggestion
+                        searchView.setOnItemClickListener((parent, view, position, id) -> {
+                            String selectedName = (String) parent.getItemAtPosition(position);
+                            Plant selectedPlant = plantMap.get(selectedName);
+
+                            // If clicked item is "No results found" or null, do nothing
+                            if (selectedPlant == null) return;
+
+                            // Prepare and launch DetailsActivity with selected plant data
+                            ArrayList<String> imageUrls = new ArrayList<>(selectedPlant.getImages());
+                            Intent intent = new Intent(activity, DetailsActivity.class);
+                            intent.putExtra("plant_id", selectedPlant.getPlantid());
+                            intent.putExtra("plant_name", selectedPlant.getName());
+                            intent.putExtra("plant_category", selectedPlant.getCategory());
+                            intent.putExtra("plant_price", selectedPlant.getPrice());
+                            intent.putExtra("plant_sunlight", selectedPlant.getSunlight());
+                            intent.putExtra("plant_water", selectedPlant.getWater());
+                            intent.putExtra("plant_season", selectedPlant.getSeason());
+                            intent.putExtra("plant_description", selectedPlant.getDescription());
+                            intent.putStringArrayListExtra("plant_images", imageUrls);
+
+                            // Start the DetailsActivity
+                            try {
+                                activity.startActivity(intent);
+                            } catch (Exception e) {
+                                Log.e("SearchBarHelper", "Failed to open DetailsActivity", e);
+                                Toast.makeText(activity, "Error: couldn't open DetailsActivity", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
-
-                    adapter.notifyDataSetChanged();
-
-                    // Update RecyclerView (even if query is empty)
-                    if (updateListener != null) {
-                        updateListener.onResultsUpdated(filteredPlants);
+                },
+                new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("SearchBarHelper", "Failed to fetch plants", e);
+                        Toast.makeText(activity, "Error loading plants data", Toast.LENGTH_SHORT).show();
                     }
                 }
-
-            });
-
-            // Handle click on a dropdown suggestion
-            searchView.setOnItemClickListener((parent, view, position, id) -> {
-                String selectedName = (String) parent.getItemAtPosition(position);
-                Plant selectedPlant = plantMap.get(selectedName);
-
-                // If clicked item is "No results found" or null, do nothing
-                if (selectedPlant == null) return;
-
-                // Prepare and launch DetailsActivity with selected plant data
-                ArrayList<String> imageUrls = new ArrayList<>(selectedPlant.getImages());
-                Intent intent = new Intent(activity, DetailsActivity.class);
-                intent.putExtra("plant_id", selectedPlant.getPlantid());
-                intent.putExtra("plant_name", selectedPlant.getName());
-                intent.putExtra("plant_category", selectedPlant.getCategory());
-                intent.putExtra("plant_price", selectedPlant.getPrice());
-                intent.putExtra("plant_sunlight", selectedPlant.getSunlight());
-                intent.putExtra("plant_water", selectedPlant.getWater());
-                intent.putExtra("plant_season", selectedPlant.getSeason());
-                intent.putExtra("plant_description", selectedPlant.getDescription());
-                intent.putStringArrayListExtra("plant_images", imageUrls);
-
-                // Start the DetailsActivity
-                try {
-                    activity.startActivity(intent);
-                } catch (Exception e) {
-                    Log.e("SearchBarHelper", "Failed to open DetailsActivity", e);
-                    Toast.makeText(activity, "Error: couldn't open DetailsActivity", Toast.LENGTH_SHORT).show();
-                }
-            });
-        });
+        );
     }
 }

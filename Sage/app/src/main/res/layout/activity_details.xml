@@ -7,204 +7,198 @@
     android:layout_height="match_parent"
     android:background="@color/mint">
 
-    <!-- Image Carousel and Dots -->
-    <LinearLayout
-        android:id="@+id/carousel_section"
+    <!-- Scrollable content above white container -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal"
+        android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/details_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/image_carousel"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginBottom="8dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:gravity="center_horizontal">
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/image_dots"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/transparent"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp"
-                app:tabMode="fixed"/>
-        </LinearLayout>
-    </LinearLayout>
+            <!-- Image Carousel -->
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/image_carousel"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:minHeight="180dp"
+                android:maxHeight="300dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/rounded_image"
+                android:clipToOutline="true"
+                android:layout_weight="1"/>
 
-    <!-- Details section -->
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/details_container"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/rounded_box_top"
-        android:clipToPadding="false"
-        android:elevation="4dp"
-        android:padding="25dp"
-        app:layout_constraintTop_toBottomOf="@id/carousel_section"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <!-- Content ScrollView  -->
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/scroll_area"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:fillViewport="true"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/favButton"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
-
+            <!-- Centered Dots -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/plant_name"
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/image_dots"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/quicksand_semibold"
-                    android:textSize="30sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/plant_category"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey"
-                    android:fontFamily="@font/quicksand_semibold"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/plant_price"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:textColor="@color/green"
-                    android:layout_marginTop="4dp" />
-
-                <!-- Light, season, water -->
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="16dp"
-                    android:gravity="center">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_sun"
-                            app:tint="@color/grey"
-                            android:contentDescription="Sunlight icon" />
-
-                        <TextView
-                            android:id="@+id/plant_sunlight"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_calendar"
-                            app:tint="@color/grey"
-                            android:contentDescription="Season icon" />
-
-                        <TextView
-                            android:id="@+id/plant_season"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:src="@drawable/ic_water"
-                            app:tint="@color/grey"
-                            android:contentDescription="Watering icon" />
-
-                        <TextView
-                            android:id="@+id/plant_water"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textSize="16sp"
-                            android:layout_marginTop="4dp" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- About -->
-                <TextView
-                    android:id="@+id/about_label"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="About"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/quicksand_semibold" />
-
-                <TextView
-                    android:id="@+id/plant_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:textSize="16sp" />
+                    android:background="@color/transparent"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="fixed"/>
             </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <!-- Favs Button -->
+    <!-- White bottom sheet-style container -->
+    <LinearLayout
+        android:id="@+id/details_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/rounded_box_top"
+        android:padding="25dp"
+        android:elevation="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:clipToPadding="false">
+
+        <!-- Plant name and price -->
+        <TextView
+            android:id="@+id/plant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/quicksand_semibold"
+            android:textSize="30sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/plant_category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:fontFamily="@font/quicksand_semibold"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/plant_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/green"
+            android:layout_marginTop="4dp"/>
+
+        <!-- Icons row: light, season, water -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="center">
+
+            <!-- Each icon column -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_sun"
+                    app:tint="@color/grey"
+                    android:contentDescription="Sunlight icon"/>
+
+                <TextView
+                    android:id="@+id/plant_sunlight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/grey"
+                    android:contentDescription="Season icon"/>
+
+                <TextView
+                    android:id="@+id/plant_season"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/ic_water"
+                    app:tint="@color/grey"
+                    android:contentDescription="Watering icon"/>
+
+                <TextView
+                    android:id="@+id/plant_water"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16sp"
+                    android:layout_marginTop="4dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- “About” section -->
+        <TextView
+            android:id="@+id/about_label"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/quicksand_semibold"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+
+        <TextView
+            android:id="@+id/plant_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"/>
+
+        <!-- “Add to Favourites” button -->
         <Button
             android:id="@+id/favButton"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:text="Add to Favourites"
             android:fontFamily="@font/quicksand_semibold"
+            android:layout_marginTop="26dp"
             android:backgroundTint="@color/green"
-            android:textColor="@android:color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -28,7 +28,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private FirestoreManager firestoreManager;
-    private RecyclerView topPicksRecyclerView;
+    private RecyclerView topPicksRecyclerView; // RecyclerView for top picks
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         // Search Bar
         AutoCompleteTextView searchAutoComplete = findViewById(R.id.searchAutoComplete);
 
-        SearchBarHelper.setupLiveSearchBar(
+        SearchBarHelper.setupSearchBar(
                 this,
                 searchAutoComplete,
                 firestoreManager,
@@ -113,20 +113,24 @@ public class MainActivity extends AppCompatActivity {
      * Loads and displays top 3 most viewed plants
      */
     private void loadTopPicks() {
-        firestoreManager.getAllPlants(plants -> {
+        FirestoreManager.retrieveAllPlants(plants -> {
             if (plants != null && !plants.isEmpty()) {
                 // Randomize first to break ties
                 Collections.shuffle(plants);
                 // Sort by views descending
                 Collections.sort(plants, (p1, p2) -> Integer.compare(p2.getViews(), p1.getViews()));
-                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size()));// Get top 3 plants by views
-                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card,false,null);
+                List<Plant> top3Plants = plants.subList(0, Math.min(3, plants.size())); // Get top 3 plants by views
+                PlantAdapter topPicksAdapter = new PlantAdapter(top3Plants, firestoreManager, R.layout.top_pick_card, false, null);
                 topPicksRecyclerView.setAdapter(topPicksAdapter);
             } else {
                 Toast.makeText(this, "No plants found", Toast.LENGTH_SHORT).show();
             }
+        }, e -> {
+            // Show failure message if data couldn't be retrieved
+            Toast.makeText(this, "Error loading plants: " + e.getMessage(), Toast.LENGTH_LONG).show();
         });
     }
+
 
     /**
      * Opens ShopActivity with a filter

@@ -62,9 +62,9 @@ public class FirestoreManager {
      */
     public void retrievePlantById(int plantId, OnSuccessListener<Plant> onSuccess, OnFailureListener onFailure) {
         db.collection(COLLECTION_NAME)
-                .document(String.valueOf(plantId))
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
+                .document(String.valueOf(plantId)) // Use plant ID as document ID
+                .get() // Get the document
+                .addOnSuccessListener(documentSnapshot -> { // Check if document exists
                     if (documentSnapshot.exists()) {
                         Plant plant = documentSnapshot.toObject(Plant.class);// Convert to Plant object
                         onSuccess.onSuccess(plant);
@@ -82,13 +82,13 @@ public class FirestoreManager {
      */
     public static void retrieveAllPlants(OnSuccessListener<List<Plant>> onSuccess, OnFailureListener onFailure) {
         db.collection(COLLECTION_NAME)
-                .get()
+                .get()// Get all documents
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<Plant> plantList = new ArrayList<>();// List to store plants
-                    for (DocumentSnapshot document : queryDocumentSnapshots) {
+                    for (DocumentSnapshot document : queryDocumentSnapshots) { // Loop through documents
                         Plant plant = document.toObject(Plant.class);// Convert to Plant object
                         if (plant != null) {
-                            plantList.add(plant);
+                            plantList.add(plant);// Add to list
                         }
                     }
                     onSuccess.onSuccess(plantList);
@@ -126,30 +126,6 @@ public class FirestoreManager {
 
     public interface OnPlantDataLoadedListener {
         void onDataLoaded(List<Plant> plants);
-    }
-
-
-    /**
-     * Retrieves all plants from Firestore and notifies the listener.
-     *
-     * @param listener Callback interface to receive loaded plant data.
-     */
-    public void getAllPlants(OnPlantDataLoadedListener listener) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("plants")
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Plant> plantList = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Plant plant = document.toObject(Plant.class);
-                        plantList.add(plant);
-                    }
-                    listener.onDataLoaded(plantList);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("Firestore", "Error fetching plants", e);
-                    listener.onDataLoaded(null);
-                });
     }
 
     /**

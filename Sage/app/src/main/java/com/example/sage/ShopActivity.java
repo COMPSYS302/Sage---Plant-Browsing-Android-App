@@ -24,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.sage.data.PlantAdapter;
 import com.example.sage.data.FirestoreManager;
 import com.example.sage.data.Plant;
-import com.example.sage.SearchBarHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -59,7 +58,7 @@ public class ShopActivity extends AppCompatActivity {
 
         // Search Bar
         AutoCompleteTextView searchBar = findViewById(R.id.searchBar);
-        SearchBarHelper.setupLiveSearchBar(
+        SearchBarHelper.setupSearchBar(
                 this,
                 searchBar,
                 firestoreManager,
@@ -85,6 +84,10 @@ public class ShopActivity extends AppCompatActivity {
         updateFilterIconColor();    // Reflect filter icon state
     }
 
+    /**
+     * Applies a category filter to the plant list.
+     * @param category
+     */
     private void applyCategoryFilter(String category) {
         selectedCategory = category; // Remember selection
         isFilterActive = !category.equalsIgnoreCase("All");
@@ -94,18 +97,18 @@ public class ShopActivity extends AppCompatActivity {
                     allPlants = plants; // Store full list
 
                     List<Plant> filtered;
-                    if (category.equalsIgnoreCase("All")) {
-                        filtered = plants;
+                    if (category.equalsIgnoreCase("All")) { // No filter
+                        filtered = plants; // Show all plants
                     } else {
-                        filtered = new ArrayList<>();
-                        for (Plant plant : plants) {
-                            if (plant.getCategory().equalsIgnoreCase(category)) {
-                                filtered.add(plant);
+                        filtered = new ArrayList<>(); // Filter list
+                        for (Plant plant : plants) { // Loop through plants
+                            if (plant.getCategory().equalsIgnoreCase(category)) { // Check category
+                                filtered.add(plant); // Add to filtered list if category matches the selection
                             }
                         }
                     }
 
-                    if (adapter == null) {
+                    if (adapter == null) { // First time loading, create adapter
                         adapter = new PlantAdapter(filtered, firestoreManager, R.layout.item_plant,false,null);
                         recyclerView.setAdapter(adapter);
                     } else {
